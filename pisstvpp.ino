@@ -89,7 +89,12 @@ void     writefile_wav  (void) ;
 //   main
 // ================
 
-int main(int argc, char *argv[]) {
+void setup()
+{
+	;
+}
+
+void main(int argc, char *argv[]) {
 
     char *protocol; 
 	int option;
