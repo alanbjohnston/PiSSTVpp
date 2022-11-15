@@ -492,6 +492,7 @@ void buildaudio_m (double pixeltime) {
 
         playtone( 1500 , 572 ) ;
         
+	Serial.println("Done row!");    
     }  // end for y
     
     printf( "Done adding image to audio data.\n" ) ;    
