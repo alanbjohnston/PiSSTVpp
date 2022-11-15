@@ -917,6 +917,9 @@ void play_pwm_file() {
   int wrap = 6;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
+  int period = 1E6 / clock;
+	
+ while (true) {	
 	
   output_file = LittleFS.open("cam.pwm", "r");
   char octet;
@@ -949,11 +952,12 @@ void play_pwm_file() {
     upper = (octet & 0xf0) >> 4;
 //    Serial.printf("%d\n%d\n", lower, upper);	 
     pwm_set_gpio_level(DDS_PWM_PIN, lower);
-    delay(1000.0/clock);
+    delayMicroseconds(period);
     pwm_set_gpio_level(DDS_PWM_PIN, upper);
-    delay(1000.0/clock);
+    delayMicroseconds(period);
   }
 	
   Serial.println("End");
   output_file.close();	
+ }	 
 }
