@@ -411,7 +411,7 @@ void addvisheader() {
     // bit of silence
 
 	
-    playtone(1500, 900000);
+//    playtone(1500, 900000);
 	
 //    return;	
 	
