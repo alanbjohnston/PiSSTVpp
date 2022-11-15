@@ -370,7 +370,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
             voltage =     0 + (int)( sin( g_theta ) * g_scale ) ;
 #endif    
 #ifdef SSTV_PWM
-            voltage =     3 + (int)( 3.0 * sin( g_theta ) * g_scale ) ;
+            voltage =     3 + (int)( sin( g_theta ) * 3.0 ) ;
+	    Serial.println(voltage);	
 #endif  		
             g_audio[i] = voltage ;
             g_theta += deltatheta ;
