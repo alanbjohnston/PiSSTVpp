@@ -381,7 +381,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	
     for ( i=1 ; i<=tonesamples ; i++ ) {
 #ifdef SSTV_PWM
-	byte octet = (g_audio[i] & 0xf) + (((g_audio[i+1] & 0xf)) << 8);    
+	byte octet = (g_audio[i] & 0xf) + (((g_audio[i+1] & 0xf)) << 4);    
 	output_file.write(octet);
 	i++;    
 #endif
