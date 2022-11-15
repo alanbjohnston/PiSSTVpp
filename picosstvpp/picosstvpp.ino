@@ -101,6 +101,7 @@ void setup() {
   Serial.begin(115200);	
 //  load_files();
   LittleFS.remove("/cam.pwm");
+  Serial.println("Deleted cam.pwm");	
   show_dir();
 }
 
