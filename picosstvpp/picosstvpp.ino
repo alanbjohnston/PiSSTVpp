@@ -952,6 +952,16 @@ void play_pwm_file() {
     pwm_set_gpio_level(dds_pwm_pin, (dds_pwm_config.top + 1) * 0.5);
   
     Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
+	 
+#define PD_PIN 22 // SR_FRS_05W PD pin - enable
+#define PTT_PIN 17 // SR_FRS_05W PTT Push to Talk - transmit
+
+  pinMode(PTT_PIN, OUTPUT);  // PTT active LOW
+  digitalWrite(PTT_PIN, LOW);
+//  digitalWrite(PTT_PIN, HIGH);  // don't transmit
+
+  pinMode(PD_PIN, OUTPUT);  // PD active HIGH
+  digitalWrite(PD_PIN, HIGH);  
 	
   sstv_micro_timer = micros();		
   while (output_file.available()) {	
