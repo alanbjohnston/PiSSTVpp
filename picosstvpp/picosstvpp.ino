@@ -925,7 +925,7 @@ void play_pwm_file() {
 	
   #define DDS_PWM_PIN 26
   int dds_pwm_pin = DDS_PWM_PIN;	
-  int clock = 11.025E3; // was 22E3 50E3;
+  int clock = RATE; // 11.025E3; // was 22E3 50E3;
   float multiplier;
   int wrap = 5;  // was 10; // 5;
   int dds_pin_slice;
