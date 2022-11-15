@@ -813,7 +813,8 @@ void writefile_wav () {
     for ( i=0 ; i<=g_samples ; i++ ) {
 //        fputc( ( g_audio[i] & 0x00ff )      , g_outfp ) ;
 //        fputc( ( g_audio[i] & 0xff00 ) >> 8 , g_outfp ) ;
-	output_file.write(&g_audio[i], sizeof(g_audio[i]));  
+	output_file.write(g_audio[i] & 0x00ff , 1);  
+	output_file.write(g_audio[i] & 0xff00 , 1);  
     }
 
     // no trailer    
