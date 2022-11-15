@@ -412,7 +412,7 @@ void addvisheader() {
 	
     playtone(1500, 900000);
 	
-    return;	
+//    return;	
 	
     playtone(    0 , 500000 ) ;   
 	
