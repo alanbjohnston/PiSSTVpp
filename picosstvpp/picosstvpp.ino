@@ -457,7 +457,7 @@ void buildaudio_m (double pixeltime) {
         for ( x=0 ; x<320 ; x++ ) {
 //            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
 		
-	 input_file.readBytes(buff, 3);
+//	 input_file.readBytes(buff, 3);
           
           r[x] =  buff[0];
           g[x] =  buff[1];
