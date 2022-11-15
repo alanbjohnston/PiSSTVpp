@@ -63,6 +63,9 @@ FILE *     g_outfp ;
 //gdImagePtr g_imgp ;
 uint16_t   g_rate;
 
+ File input_file;
+ File output_file
+
 // ========
 // protos
 // ========
@@ -212,8 +215,8 @@ void loop() {
         return 3 ;
     }    
 */    
-    File input_file = LittleFS.open("/cam.bin", "r");	
-    File output_file = LittleFS.open("/cam.wav", "w+");	
+    input_file = LittleFS.open("/cam.bin", "r");	
+    output_file = LittleFS.open("/cam.wav", "w+");	
     Serial.printf( "Image ptr opened.\n" ) ;
 
     // go!
