@@ -926,9 +926,19 @@ void play_pwm_file() {
   pwm_config dds_pwm_config;
   int period = 1E6 / clock;
 	
- while (true) {	
+#define PD_PIN 22 // SR_FRS_05W PD pin - enable
+#define PTT_PIN 17 // SR_FRS_05W PTT Push to Talk - transmit
+
+  Serial.println("Start transmit");	 
+	 
+  pinMode(PTT_PIN, OUTPUT);  // PTT active LOW
+  digitalWrite(PTT_PIN, LOW);
+//  digitalWrite(PTT_PIN, HIGH);  // don't transmit
+
+  pinMode(PD_PIN, OUTPUT);  // PD active HIGH
+  digitalWrite(PD_PIN, HIGH);  
+		
 	
-  output_file = LittleFS.open("cam.pwm", "r");
   char octet;
   byte lower;
   byte upper;
@@ -953,16 +963,14 @@ void play_pwm_file() {
   
     Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
 	 
-#define PD_PIN 22 // SR_FRS_05W PD pin - enable
-#define PTT_PIN 17 // SR_FRS_05W PTT Push to Talk - transmit
 
-  pinMode(PTT_PIN, OUTPUT);  // PTT active LOW
-  digitalWrite(PTT_PIN, LOW);
-//  digitalWrite(PTT_PIN, HIGH);  // don't transmit
-
-  pinMode(PD_PIN, OUTPUT);  // PD active HIGH
-  digitalWrite(PD_PIN, HIGH);  
+  delay(1000);	 
 	
+ while (true) {	
+	
+  output_file = LittleFS.open("cam.pwm", "r");
+	
+	 
   sstv_micro_timer = micros();		
   while (output_file.available()) {	
 	  
