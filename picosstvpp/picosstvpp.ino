@@ -909,7 +909,7 @@ void load_files() {
 void play_pwm_file() {
 	
   output_file = LittleFS.open("cam.pwm", "r");
-  byte octet;
+  char octet;
   byte lower;
   byte upper;
   Serial.println("Playing PWM file");	
