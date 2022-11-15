@@ -99,6 +99,7 @@ void setup() {
 	
   delay(10000);	
   Serial.begin(115200);	
+  show_dir();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
   Serial.println("Deleted cam.pwm");	
@@ -970,7 +971,7 @@ void play_pwm_file() {
 	
  while (true) {	
 	
-  output_file = LittleFS.open("cam.pwm", "r");
+  output_file = LittleFS.open("/cam.pwm", "r");
 	
 	 
   sstv_micro_timer = micros();		
