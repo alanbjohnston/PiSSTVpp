@@ -29,7 +29,7 @@
 // macros/defines
 // ================
 
-#define RATE   11025 
+#define RATE   22000 // 11025 
 #define MAXRATE   22050
 #define BITS   16
 #define CHANS  1 
