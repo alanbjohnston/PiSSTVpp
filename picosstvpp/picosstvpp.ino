@@ -93,6 +93,8 @@ void show_dir();
 void load_files();
 
 void setup() {
+	
+  delay(10000);	
   Serial.begin(115200);	
 //  load_files();
   show_dir();
@@ -270,6 +272,9 @@ void loop() {
     
     uint32_t endtime = millis();	// time(NULL) ;
     Serial.printf( "Created soundfile in %d milliseconds.\n" , ( endtime - starttime ) ) ;
+	
+    show_dir();
+    delay(10000);	
     
 //    return 0 ;
 }
