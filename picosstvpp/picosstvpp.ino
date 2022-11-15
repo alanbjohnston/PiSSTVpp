@@ -6,6 +6,8 @@
 
 // Note: Compile me thus:  gcc -lgd -lmagic -o sstvX sstvX.c
 
+// Ported to Raspberry Pi Pico by Alan Johnston, KU2Y
+
 // ===========
 // includes
 // ===========
@@ -58,7 +60,7 @@ uint8_t    g_protocol; //VIS ID's for SSTV protocols
 
 FILE *     g_imgfp ;
 FILE *     g_outfp ;
-gdImagePtr g_imgp ;
+//gdImagePtr g_imgp ;
 uint16_t   g_rate;
 
 // ========
