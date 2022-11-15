@@ -448,7 +448,8 @@ void buildaudio_m (double pixeltime) {
 	
     for ( y=0 ; y<256 ; y++ ) {
 	    
-	Serial.println("Starting row!");    
+	Serial.println("Starting row!\n");    
+	delay(1000);    
     
         // read image data
         for ( x=0 ; x<320 ; x++ ) {
