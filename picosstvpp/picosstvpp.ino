@@ -915,10 +915,11 @@ void play_pwm_file() {
   Serial.println("Playing PWM file");	
 	
   while (output_file.available()) {	
-    myFile.readBytes(octet, 1);
+    output_file.readBytes(octet, 1);
     lower = octet & 0x0f;
     upper = (octet & 0xf0) >> 4;
     Serial.printf("%d\n%d\n", lower, upper);	  
   }
-  Serial.println("End");	
+  Serial.println("End");
+  output_file.close();	
 }
