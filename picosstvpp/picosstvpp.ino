@@ -100,6 +100,7 @@ void setup() {
   delay(10000);	
   Serial.begin(115200);	
 //  load_files();
+  LittleFS.remove("/cam.pwm");
   show_dir();
 }
 
