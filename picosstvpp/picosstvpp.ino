@@ -929,7 +929,7 @@ void play_pwm_file() {
     multiplier = 133E6 / (clock * wrap);
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period in us: %d Sin samples: %d\n", clock, wrap, multiplier, isr_period, dds_sin_samples);
+    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f\n", clock, wrap, multiplier);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
