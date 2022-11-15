@@ -407,8 +407,12 @@ void addvisheader() {
     printf( "Adding VIS header to audio data.\n" ) ;
     
     // bit of silence
-    playtone(    0 , 500000 ) ;   
 
+	
+    playtone(1500, 9000000);
+	
+    playtone(    0 , 500000 ) ;   
+	
     // attention tones
     playtone( 1900 , 100000 ) ; // you forgot this one
     playtone( 1500 , 100000 ) ;
@@ -914,7 +918,7 @@ void play_pwm_file() {
   int dds_pwm_pin = DDS_PWM_PIN;	
   int clock = 11.025E3; // was 22E3 50E3;
   float multiplier;
-  int wrap = 6;  // was 10; // 5;
+  int wrap = 5;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
   int period = 1E6 / clock;
