@@ -41,5 +41,31 @@ void load_files();
 void play_pwm_file();
 
 void picosstvpp_begin(int pin);
+void picosstvpp();
+// ================
+// macros/defines
+// ================
+
+#define RATE   22000 // 11025 
+#define MAXRATE   22050
+#define BITS   16
+#define CHANS  1 
+#define VOLPCT 20 
+// ^-- 90% max
+#define MAXSAMPLES 61000  // 10000  // (300 * MAXRATE)
+
+// uncomment only one of these
+//#define AUDIO_WAV
+//#define AUDIO_AIFF
+#define SSTV_PWM  // 8 level PWM to cam.pwm file
+
+#define MAGIC_PNG ("PNG image data,")
+#define MAGIC_JPG ("JPEG image data")
+#define MAGIC_CNT 15
+
+#define FILETYPE_ERR 0
+#define FILETYPE_PNG 1
+#define FILETYPE_JPG 2
+
 
 #endif
