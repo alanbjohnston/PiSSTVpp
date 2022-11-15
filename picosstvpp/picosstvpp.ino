@@ -232,7 +232,7 @@ void loop() {
     // go!
 
     addvisheader() ;
-/*    
+/**/    
     //Selects audio format mode
     switch (g_protocol) {
         case 44: //Martin 1
@@ -261,7 +261,7 @@ void loop() {
 
 
     addvistrailer() ;
-*/	
+/**/	
     
 #ifdef AUDIO_AIFF    
     writefile_aiff() ;
