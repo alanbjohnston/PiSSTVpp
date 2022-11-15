@@ -14,13 +14,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
-#include <gd.h>
+//#include <gd.h>
 #include <time.h>
 #include <math.h>
-#include <tgmath.h>
-#include <magic.h>
-#include <unistd.h>
-
+//#include <tgmath.h>
+//#include <magic.h>
+//#include <unistd.h>
+#include "LittleFS.h"
 
 // ================
 // macros/defines
@@ -84,17 +84,27 @@ void     writefile_aiff (void) ;
 void     writefile_wav  (void) ;
 #endif
 
+void show_dir();
+void load_files();
+
+void setup() {
+  Serial.begin(115200);	
+  load_files();
+  show_dir();
+}
 
 // ================
 //   main
 // ================
 
-int main(int argc, char *argv[]) {
-
+// int main(int argc, char *argv[]) {
+void loop() {
     char *protocol; 
 	int option;
 
     g_rate = RATE;
+    g_protocol = 56; //Scottie 2
+/*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
         switch (option) {
             case 'r':
@@ -129,10 +139,10 @@ int main(int argc, char *argv[]) {
         printf("Unrecognized protocol option %s, defaulting to Martin 1...\n\n", protocol);
         g_protocol = 44;
     }
-
+*/
 
     // locals
-    uint32_t starttime = time(NULL) ;
+    uint32_t starttime = millis();	 // time(NULL) ;	
     uint8_t ft ; 
     char inputfile[255], outputfile[255] ;
     
@@ -155,15 +165,15 @@ int main(int argc, char *argv[]) {
     g_samples = 0.0 ;
     g_fudge = 0.0 ;
 
-    printf( "Constants check:\n" ) ;
-    printf( "      rate = %d\n" , g_rate ) ;
-    printf( "  VIS code = %d\n" , g_protocol);
-    printf( "      BITS = %d\n" , BITS ) ;
-    printf( "    VOLPCT = %d\n" , VOLPCT ) ; 
-    printf( "     scale = %d\n" , g_scale ) ;
-    printf( "   us/samp = %f\n" , g_uspersample ) ;
-    printf( "   2p/rate = %f\n\n" , g_twopioverrate ) ;
-    
+    Serial.printf( "Constants check:\n" ) ;
+    Serial.printf( "      rate = %d\n" , g_rate ) ;
+    Serial.printf( "  VIS code = %d\n" , g_protocol);
+    Serial.printf( "      BITS = %d\n" , BITS ) ;
+    Serial.printf( "    VOLPCT = %d\n" , VOLPCT ) ; 
+    Serial.printf( "     scale = %d\n" , g_scale ) ;
+    Serial.printf( "   us/samp = %f\n" , g_uspersample ) ;
+    Serial.printf( "   2p/rate = %f\n\n" , g_twopioverrate ) ;
+/*    
     // set filenames    
     strncpy( inputfile , argv[optind] , strlen( argv[optind] ) ) ;
     ft = filetype( inputfile ) ;
@@ -199,8 +209,10 @@ int main(int argc, char *argv[]) {
         printf( "Some weird error!\n" ) ;
         return 3 ;
     }    
-    
-    printf( "Image ptr opened.\n" ) ;
+*/    
+    File input_file = LittleFS.open("/cam.bin", "r");	
+    File output_file = LittleFS.open("/cam.wav", "w+");	
+    Serial.printf( "Image ptr opened.\n" ) ;
 
     // go!
 
@@ -227,8 +239,8 @@ int main(int argc, char *argv[]) {
             buildaudio_r36();
             break;
         default:
-            printf("Something went horribly wrong: unknown protocol while building audio!\n");
-            exit(2);
+            Serial.printf("Something went horribly wrong: unknown protocol while building audio!\n");
+ //           exit(2);
             break;
     }
 
@@ -244,15 +256,17 @@ int main(int argc, char *argv[]) {
 
     // cleanup
 
-    fclose( g_imgfp ) ;
-    fclose( g_outfp ) ;
-    
+//    fclose( g_imgfp ) ;
+//    fclose( g_outfp ) ;
+	
+    input_file.close();
+    output_file.close();	
     // brag
     
-    uint32_t endtime = time(NULL) ;
-    printf( "Created soundfile in %d seconds.\n" , ( endtime - starttime ) ) ;
+    uint32_t endtime = millis();	// time(NULL) ;
+    Serial.printf( "Created soundfile in %d milliseconds.\n" , ( endtime - starttime ) ) ;
     
-    return 0 ;
+//    return 0 ;
 }
 
 
@@ -265,6 +279,7 @@ int main(int argc, char *argv[]) {
 //             supported formats (currently jus JPEG and PNG).
 //             Uses libmagic.
 
+/*
 uint8_t filetype( char *filename ) {
     magic_t m ;
     char m_str[ MAGIC_CNT + 2 ] ;
@@ -302,7 +317,7 @@ uint8_t filetype( char *filename ) {
     
     return retval ;
 }
-
+*/
 
 // playtone -- Add waveform info to audio data. New waveform data is 
 //             added in a phase-continuous manner according to the 
@@ -396,7 +411,7 @@ void addvisheader() {
 
     // VIS stop
     playtone( 1200 ,  30000 ) ; 
-    printf( "Done adding VIS header to audio data.\n" ) ;
+    Serial.printf( "Done adding VIS header to audio data.\n" ) ;
         
 } // end addvisheader   
 
@@ -408,19 +423,27 @@ void buildaudio_m (double pixeltime) {
     uint32_t pixel ;
     uint8_t r[320], g[320], b[320] ;
     
-    printf( "Adding image to audio data.\n" ) ;
-    
+    Serial.printf( "Adding image to audio data.\n" ) ;
+	
+    char buff[3];
+	
     for ( y=0 ; y<256 ; y++ ) {
     
         // read image data
         for ( x=0 ; x<320 ; x++ ) {
-            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
+//            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
+		
+	 input_file.readBytes(buff, 3);
+          
+          r[x] =  buff[0];
+          g[x] =  buff[1];
+          b[x] =  buff[2];	
             //printf( "Got pixel.\n" ) ;
             
             // get color data
-            r[x] = gdTrueColorGetRed( pixel ) ;
-            g[x] = gdTrueColorGetGreen( pixel ) ;
-            b[x] = gdTrueColorGetBlue( pixel ) ;
+//            r[x] = gdTrueColorGetRed( pixel ) ;
+//            g[x] = gdTrueColorGetGreen( pixel ) ;
+//            b[x] = gdTrueColorGetBlue( pixel ) ;
         }
         
         // add row markers to audio
@@ -464,20 +487,28 @@ void buildaudio_s (double pixeltime) {
     uint32_t pixel ;
     uint8_t r[320], g[320], b[320] ;
     
-    printf( "Adding image to audio data.\n" ) ;
-    
+    Serial.printf( "Adding image to audio data.\n" ) ;
+	
+    char buff[3];
+	    
     //add starting sync pulse
     playtone( 1200 , 9000);
 
     for ( y=0 ; y<256 ; y++ ) {
         // read image data
         for ( x=0 ; x<320 ; x++ ) {
-            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
+		
+	 input_file.readBytes(buff, 3);
+          
+          r[x] =  buff[0];
+          g[x] =  buff[1];
+          b[x] =  buff[2];			
+//            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
             
             // get color data
-            r[x] = gdTrueColorGetRed( pixel ) ;
-            g[x] = gdTrueColorGetGreen( pixel ) ;
-            b[x] = gdTrueColorGetBlue( pixel ) ;
+//            r[x] = gdTrueColorGetRed( pixel ) ;
+//            g[x] = gdTrueColorGetGreen( pixel ) ;
+//            b[x] = gdTrueColorGetBlue( pixel ) ;
         }
         //seperator pulse
         playtone(1500, 1500);
@@ -507,7 +538,7 @@ void buildaudio_s (double pixeltime) {
         
     }  // end for y
     
-    printf( "Done adding image to audio data.\n" ) ;    
+    Serial.printf( "Done adding image to audio data.\n" ) ;    
     
 }  // end buildaudio_s
 
@@ -521,13 +552,13 @@ void buildaudio_r36 () {
     uint8_t r1, g1, b1, r2, g2, b2, avgr, avgg, avgb;
     uint8_t y1[320], y2[320], ry[320], by[320];
 
-    printf( "Adding image to audio data.\n" ) ;
+    Serial.printf( "Adding image to audio data.\n" ) ;
     
     for ( y=0 ; y<240 ; y+=2 ) {
     
         // read image data
         for ( x=0 ; x<320 ; x++ ) {
-
+/*
             //even line pixel
             pixel1 = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
             //odd line pixel 
@@ -540,7 +571,7 @@ void buildaudio_r36 () {
             g2 = gdTrueColorGetGreen( pixel2 );
             b1 = gdTrueColorGetBlue( pixel1 );
             b2 = gdTrueColorGetBlue( pixel2 );
-
+*/
             avgr = (uint8_t)( ((uint16_t)r1 + (uint16_t)r2) / 2 );
 
             avgg = (uint8_t)( ((uint16_t)g1 + (uint16_t)g2) / 2 );
@@ -604,7 +635,7 @@ void buildaudio_r36 () {
   
     }  // end for y
     
-    printf( "Done adding image to audio data.\n" ) ;    
+    Serial.printf( "Done adding image to audio data.\n" ) ;    
     
 }  // end buildaudio_r36
 
@@ -639,8 +670,8 @@ void writefile_aiff () {
     audiosize = 8 + ( 2 * g_samples ) ;      // header + 2bytes/samp
     totalsize = 4 + 8 + 18 + 8 + audiosize ;
 
-    printf( "Writing audio data to file.\n" ) ;
-    printf( "Got a total of [%d] samples.\n" , g_samples ) ;
+    Serial.printf( "Writing audio data to file.\n" ) ;
+    Serial.printf( "Got a total of [%d] samples.\n" , g_samples ) ;
     
     // "form" chunk
     fputs( "FORM" , g_outfp ) ;
@@ -697,7 +728,7 @@ void writefile_aiff () {
         fputc( ( g_audio[i] & 0x00ff )      , g_outfp ) ;
     }
     
-    printf( "Done writing to audio file.\n" ) ;
+    Serial.printf( "Done writing to audio file.\n" ) ;
 }
 #endif 
 
@@ -716,9 +747,9 @@ void writefile_wav () {
     byterate   = g_rate * CHANS * BITS / 8 ;        // audio bytes / sec
     blockalign = CHANS * BITS / 8 ;               // total bytes / sample
     
-    printf( "Writing audio data to file.\n" ) ;
-    printf( "Got a total of [%d] samples.\n" , g_samples ) ;
-    
+    Serial.printf( "Writing audio data to file.\n" ) ;
+    Serial.printf( "Got a total of [%d] samples.\n" , g_samples ) ;
+/*    
     // RIFF header 
     fputs( "RIFF" , g_outfp ) ;
     
@@ -772,17 +803,70 @@ void writefile_wav () {
     fputc( (audiosize & 0x0000ff00) >>  8 , g_outfp ) ;    
     fputc( (audiosize & 0x00ff0000) >> 16 , g_outfp ) ;    
     fputc( (audiosize & 0xff000000) >> 24 , g_outfp ) ;
-    
+*/    
     // FINALLY, the audio data itself (LE!!)
     for ( i=0 ; i<=g_samples ; i++ ) {
-        fputc( ( g_audio[i] & 0x00ff )      , g_outfp ) ;
-        fputc( ( g_audio[i] & 0xff00 ) >> 8 , g_outfp ) ;
+//        fputc( ( g_audio[i] & 0x00ff )      , g_outfp ) ;
+//        fputc( ( g_audio[i] & 0xff00 ) >> 8 , g_outfp ) ;
+	output_file.write(&g_audio[i], sizeof(g_audio[i]));  
     }
 
     // no trailer    
-    printf( "Done writing to audio file.\n" ) ;
+    Serial.printf( "Done writing to audio file.\n" ) ;
 }
 #endif
 
         
 // end
+
+void show_dir() {
+  LittleFS.begin();
+  Dir dir = LittleFS.openDir("/");
+// or Dir dir = LittleFS.openDir("/data");
+  Serial.println("FS directory:");
+  while (dir.next()) {
+    Serial.print(dir.fileName());
+    if(dir.fileSize()) {
+        File f = dir.openFile("r");
+        Serial.print(" ");
+        Serial.println(f.size());
+    } else
+        Serial.println(" 0");	    
+  }
+  Serial.println(">");
+}
+
+void load_files() {
+  LittleFS.begin();
+  File f;
+	
+  f = LittleFS.open("sstv_image_1_320_x_240.jpg", "r");
+  if (f) {	
+    Serial.println("Image sstv_image_1_320_x_240.jpg already in FS");
+    f.close();
+  } else {
+    Serial.println("Loading image sstv_image_1_320_x_240.jpg into FS");
+    f = LittleFS.open("sstv_image_1_320_x_240.jpg", "w+");
+    if (f.write(sstv_image_1_320_x_240, sizeof(sstv_image_1_320_x_240)) < sizeof(sstv_image_1_320_x_240)) {
+       Serial.println("Loading image failed. Is Flash Size (FS) set to 512kB?");	     
+       delay(2000);
+    }
+    f.close();
+  }
+/**/
+  f = LittleFS.open("sstv_image_2_320_x_240.jpg", "r");
+  if (f) {	
+    Serial.println("Image sstv_image_2_320_x_240.jpg already in FS");
+    f.close();
+  } else {
+    Serial.println("Loading image sstv_image_2_320_x_240.jpg into FS");
+    f = LittleFS.open("sstv_image_2_320_x_240.jpg", "w+");
+    if (f.write(sstv_image_2_320_x_240, sizeof(sstv_image_2_320_x_240)) < sizeof(sstv_image_2_320_x_240)) {
+       Serial.println("Loading image failed. Is Flash Size (FS) set to 512kB?");
+       delay(2000);
+    }
+    f.close();
+  }
+/**/	
+  show_dir();
+}
