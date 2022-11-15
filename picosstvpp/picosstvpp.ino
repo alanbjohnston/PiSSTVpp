@@ -34,7 +34,7 @@
 #define CHANS  1 
 #define VOLPCT 20 
 // ^-- 90% max
-#define MAXSAMPLES (300 * MAXRATE)
+#define MAXSAMPLES 2048  // (300 * MAXRATE)
 
 // uncomment only one of these
 #define AUDIO_WAV
@@ -256,7 +256,7 @@ void loop() {
     writefile_aiff() ;
 #endif
 #ifdef AUDIO_WAV
-    writefile_wav();
+//    writefile_wav();
 #endif    
 
     // cleanup
@@ -338,12 +338,16 @@ void playtone( uint16_t tonefreq , double tonedur ) {
      
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
+    if (tonesamples > MAXSAMPLES) {
+	Serial.printf("Tonesamples overflow: %d \n", tonesamples); 
+	tonesamples = MAXSAMPLES - 1;    
+    }
     deltatheta = g_twopioverrate * tonefreq ;
     
     for ( i=1 ; i<=tonesamples ; i++ ) {
         g_samples++ ;
         
-        if ( tonefreq == 0 ) { g_audio[ g_samples ] = 32768 ; }
+        if ( tonefreq == 0 ) { g_audio[i] = 32768 ; }
         else {
 
 #ifdef AUDIO_AIFF        
@@ -352,12 +356,17 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef AUDIO_WAV
             voltage =     0 + (int)( sin( g_theta ) * g_scale ) ;
 #endif            
-            g_audio[g_samples] = voltage ;
+            g_audio[i] = voltage ;
             g_theta += deltatheta ;
         }
     } // end for i        
     
     g_fudge = tonedur - ( tonesamples * g_uspersample ) ;
+	
+    for ( i=1 ; i<=tonesamples ; i++ ) {	
+	output_file.write(g_audio[i] & 0x00ff);  
+	output_file.write(g_audio[i] & 0xff00);  
+    }
 }  // end playtone    
 
 uint16_t toneval_rgb ( uint8_t colorval ) {
