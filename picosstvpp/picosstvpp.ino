@@ -70,7 +70,7 @@ uint16_t   g_rate;
 // protos
 // ========
 
-uint8_t  filetype       (char *filename) ;
+//uint8_t  filetype       (char *filename) ;
 void     playtone       (uint16_t tonefreq , double tonedur) ;
 void     addvisheader   (void) ;
 void     addvistrailer  (void) ;
