@@ -23,6 +23,7 @@
 //#include <magic.h>
 //#include <unistd.h>
 #include "LittleFS.h"
+#include "hardware/pwm.h" 
 
 // ================
 // macros/defines
@@ -909,18 +910,50 @@ void load_files() {
 
 void play_pwm_file() {
 	
+  #define DDS_PWM_PIN 26
+  int dds_pwm_pin = DDS_PWM_PIN;	
+  int clock = 11.025E3; // was 22E3 50E3;
+  float multiplier;
+  int wrap = 6;  // was 10; // 5;
+  int dds_pin_slice;
+  pwm_config dds_pwm_config;
+	
   output_file = LittleFS.open("cam.pwm", "r");
   char octet;
   byte lower;
   byte upper;
   Serial.println("Playing PWM file");	
 	
+    dds_pwm_pin = 26;
+   
+    multiplier = 133E6 / (clock * wrap);
+//    isr_period = (int) ( 1E6 / clock + 0.5);
+    
+    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period in us: %d Sin samples: %d\n", clock, wrap, multiplier, isr_period, dds_sin_samples);
+
+    gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
+    dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
+
+    dds_pwm_config = pwm_get_default_config();
+    pwm_config_set_clkdiv(&dds_pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
+    pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
+    pwm_init(dds_pin_slice, &dds_pwm_config, true);
+    pwm_set_gpio_level(dds_pwm_pin, (dds_pwm_config.top + 1) * 0.5);
+  
+    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
+	
+	
   while (output_file.available()) {	
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
     upper = (octet & 0xf0) >> 4;
-    Serial.printf("%d\n%d\n", lower, upper);	  
+    Serial.printf("%d\n%d\n", lower, upper);	 
+    pwm_set_gpio_level(DDS_PWM_PIN, lower);
+    delay(1000.0/clock);
+    pwm_set_gpio_level(DDS_PWM_PIN, upper);
+    delay(1000.0/clock);
   }
+	
   Serial.println("End");
   output_file.close();	
 }
