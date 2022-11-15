@@ -37,8 +37,9 @@
 #define MAXSAMPLES 10000  // (300 * MAXRATE)
 
 // uncomment only one of these
-#define AUDIO_WAV
+//#define AUDIO_WAV
 //#define AUDIO_AIFF
+#define SSTV_PWM  // 8 level PWM to cam.pwm file
 
 #define MAGIC_PNG ("PNG image data,")
 #define MAGIC_JPG ("JPEG image data")
@@ -217,8 +218,13 @@ void loop() {
         return 3 ;
     }    
 */    
-    input_file = LittleFS.open("/cam.bin", "r");	
+    input_file = LittleFS.open("/cam.bin", "r");
+#ifdef WAV	
     output_file = LittleFS.open("/cam.wav", "w+");	
+#endif	
+#ifdef SSTV_PWM	
+    output_file = LittleFS.open("/cam.pwm", "w+");	
+#endif	
     Serial.printf( "Image ptr opened.\n" ) ;
 
     // go!
@@ -258,7 +264,7 @@ void loop() {
     writefile_aiff() ;
 #endif
 #ifdef AUDIO_WAV
-//    writefile_wav();
+    writefile_wav();
 #endif    
 
     // cleanup
@@ -360,7 +366,10 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 #endif
 #ifdef AUDIO_WAV
             voltage =     0 + (int)( sin( g_theta ) * g_scale ) ;
-#endif            
+#endif    
+#ifdef SSTV_PWM
+            voltage =     3 + (int)( 3.0 * sin( g_theta ) * g_scale ) ;
+#endif  		
             g_audio[i] = voltage ;
             g_theta += deltatheta ;
         }
@@ -368,8 +377,12 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     
     g_fudge = tonedur - ( tonesamples * g_uspersample ) ;
 	
-    for ( i=1 ; i<=tonesamples ; i++ ) {	
-	output_file.write(g_audio[i] & 0x00ff);  
+    for ( i=1 ; i<=tonesamples ; i++ ) {
+#ifdef SSTV_PWM
+	byte octet = (g_audio[i] & 0xf) + (((g_audio[i+1] & 0xf)) << 8);    
+	output_file.write(octet);
+	i++;    
+#endif
 //	output_file.write(g_audio[i] & 0xff00);  
     }
 }  // end playtone    
