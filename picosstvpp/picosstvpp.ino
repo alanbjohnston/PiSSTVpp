@@ -947,7 +947,7 @@ void play_pwm_file() {
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
     upper = (octet & 0xf0) >> 4;
-    Serial.printf("%d\n%d\n", lower, upper);	 
+//    Serial.printf("%d\n%d\n", lower, upper);	 
     pwm_set_gpio_level(DDS_PWM_PIN, lower);
     delay(1000.0/clock);
     pwm_set_gpio_level(DDS_PWM_PIN, upper);
