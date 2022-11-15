@@ -92,6 +92,7 @@ void     writefile_wav  (void) ;
 
 void show_dir();
 void load_files();
+void play_pwm_file();
 
 void setup() {
 	
@@ -281,7 +282,8 @@ void loop() {
 	
     show_dir();
     delay(10000);	
-    
+    play_pwm_file();
+    delay(10000);	
 //    return 0 ;
 }
 
@@ -903,3 +905,20 @@ void load_files() {
   show_dir();
 }
 */
+
+void play_pwm_file() {
+	
+  output_file = LittleFS.open("cam.pwm", "r");
+  byte octet;
+  byte lower;
+  byte upper;
+  Serial.println("Playing PWM file");	
+	
+  while (output_file.available()) {	
+    myFile.readBytes(octet, 1);
+    lower = octet & 0x0f;
+    upper = (octet & 0xf0) >> 4;
+    Serial.printf("%d\n%d\n", lower, upper);	  
+  }
+  Serial.println("End");	
+}
