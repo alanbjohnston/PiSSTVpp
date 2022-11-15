@@ -446,6 +446,8 @@ void buildaudio_m (double pixeltime) {
 	
     char buff[3];
 	
+    Serial.println("Starting!");	
+	
     for ( y=0 ; y<256 ; y++ ) {
 	    
 	Serial.println("Starting row!\n");    
