@@ -232,7 +232,7 @@ void loop() {
     // go!
 
     addvisheader() ;
-    
+/*    
     //Selects audio format mode
     switch (g_protocol) {
         case 44: //Martin 1
@@ -261,6 +261,7 @@ void loop() {
 
 
     addvistrailer() ;
+*/	
     
 #ifdef AUDIO_AIFF    
     writefile_aiff() ;
@@ -282,7 +283,7 @@ void loop() {
     Serial.printf( "Created soundfile in %d milliseconds.\n" , ( endtime - starttime ) ) ;
 	
     show_dir();
-    delay(10000);	
+    delay(1000);	
     play_pwm_file();
     delay(10000);	
 //    return 0 ;
@@ -410,6 +411,8 @@ void addvisheader() {
 
 	
     playtone(1500, 9000000);
+	
+    return;	
 	
     playtone(    0 , 500000 ) ;   
 	
