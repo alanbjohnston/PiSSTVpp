@@ -999,6 +999,6 @@ void play_pwm_file() {
 	
   Serial.println("End");
   output_file.close();	
-    delay(1000);	 	 
+  delay(5000);	 	 
  }	 
 }
