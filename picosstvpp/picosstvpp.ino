@@ -370,7 +370,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	
     for ( i=1 ; i<=tonesamples ; i++ ) {	
 	output_file.write(g_audio[i] & 0x00ff);  
-	output_file.write(g_audio[i] & 0xff00);  
+//	output_file.write(g_audio[i] & 0xff00);  
     }
 }  // end playtone    
 
@@ -442,17 +442,10 @@ void buildaudio_m (double pixeltime) {
     uint32_t pixel ;
     uint8_t r[320], g[320], b[320] ;
     
-    Serial.printf( "Adding image to audio data!\n" ) ;
-	
     char buff[3];
 	
-    Serial.println("Starting!");	
-	
-    for ( y=0 ; y<256 ; y++ ) {
-	    
-	Serial.println("Starting row!\n");    
-	delay(1000);    
-    
+     for ( y=0 ; y<256 ; y++ ) {
+	        
         // read image data
         for ( x=0 ; x<320 ; x++ ) {
 //            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
@@ -497,7 +490,6 @@ void buildaudio_m (double pixeltime) {
 
         playtone( 1500 , 572 ) ;
         
-	Serial.println("Done row!");    
     }  // end for y
     
     printf( "Done adding image to audio data.\n" ) ;    
@@ -522,7 +514,7 @@ void buildaudio_s (double pixeltime) {
 //    for ( y=0 ; y<256 ; y++ ) {
     for ( y=0 ; y<20 ; y++ ) {
         // read image data
-	Serial.println("Starting row");    
+//	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
 		
 	 input_file.readBytes(buff, 3);
@@ -562,7 +554,7 @@ void buildaudio_s (double pixeltime) {
         for ( k=0 ; k<320 ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
-       Serial.println("Ending row");    
+//       Serial.println("Ending row");    
     }  // end for y
     
     Serial.printf( "Done adding image to audio data.\n" ) ;    
