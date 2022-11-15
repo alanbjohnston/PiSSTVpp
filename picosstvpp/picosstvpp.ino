@@ -34,7 +34,7 @@
 #define CHANS  1 
 #define VOLPCT 20 
 // ^-- 90% max
-#define MAXSAMPLES 2048  // (300 * MAXRATE)
+#define MAXSAMPLES 10000  // (300 * MAXRATE)
 
 // uncomment only one of these
 #define AUDIO_WAV
@@ -447,6 +447,8 @@ void buildaudio_m (double pixeltime) {
     char buff[3];
 	
     for ( y=0 ; y<256 ; y++ ) {
+	    
+	Serial.println("Starting row!");    
     
         // read image data
         for ( x=0 ; x<320 ; x++ ) {
