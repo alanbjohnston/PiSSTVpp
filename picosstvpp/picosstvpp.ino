@@ -102,6 +102,9 @@ void setup() {
   show_dir();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
+  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
+   LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+	
   Serial.println("Deleted cam.pwm");	
   show_dir();
 }
@@ -541,8 +544,8 @@ void buildaudio_s (double pixeltime) {
     //add starting sync pulse
     playtone( 1200 , 9000);
 
-//    for ( y=0 ; y<256 ; y++ ) {
-    for ( y=0 ; y<100 ; y++ ) {
+    for ( y=0 ; y<256 ; y++ ) {
+//    for ( y=0 ; y<100 ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
