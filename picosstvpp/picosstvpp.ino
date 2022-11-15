@@ -521,6 +521,7 @@ void buildaudio_s (double pixeltime) {
 
     for ( y=0 ; y<256 ; y++ ) {
         // read image data
+	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
 		
 	 input_file.readBytes(buff, 3);
@@ -560,7 +561,7 @@ void buildaudio_s (double pixeltime) {
         for ( k=0 ; k<320 ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
-        
+       Serial.println("Ending row");    
     }  // end for y
     
     Serial.printf( "Done adding image to audio data.\n" ) ;    
