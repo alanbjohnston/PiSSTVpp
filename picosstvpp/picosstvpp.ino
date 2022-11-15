@@ -35,7 +35,7 @@
 #define CHANS  1 
 #define VOLPCT 20 
 // ^-- 90% max
-#define MAXSAMPLES 10000  // (300 * MAXRATE)
+#define MAXSAMPLES 61000  // 10000  // (300 * MAXRATE)
 
 // uncomment only one of these
 //#define AUDIO_WAV
