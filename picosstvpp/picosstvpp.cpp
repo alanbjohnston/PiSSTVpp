@@ -4,51 +4,9 @@
 // 2014 Gerrit Polder, PA3BYA fixed header. 
 // 2014 Don Gi Min, KM4EQR, more protocols and option handling
 
-// Note: Compile me thus:  gcc -lgd -lmagic -o sstvX sstvX.c
+// Ported to Raspberry Pi Pico and turned into a library by Alan Johnston, KU2Y
 
-// Ported to Raspberry Pi Pico by Alan Johnston, KU2Y
-
-// ===========
-// includes
-// ===========
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <inttypes.h>
-//#include <gd.h>
-#include <time.h>
-#include <math.h>
-//#include <tgmath.h>
-//#include <magic.h>
-//#include <unistd.h>
-#include "LittleFS.h"
-#include "hardware/pwm.h" 
-
-// ================
-// macros/defines
-// ================
-
-#define RATE   22000 // 11025 
-#define MAXRATE   22050
-#define BITS   16
-#define CHANS  1 
-#define VOLPCT 20 
-// ^-- 90% max
-#define MAXSAMPLES 61000  // 10000  // (300 * MAXRATE)
-
-// uncomment only one of these
-//#define AUDIO_WAV
-//#define AUDIO_AIFF
-#define SSTV_PWM  // 8 level PWM to cam.pwm file
-
-#define MAGIC_PNG ("PNG image data,")
-#define MAGIC_JPG ("JPEG image data")
-#define MAGIC_CNT 15
-
-#define FILETYPE_ERR 0
-#define FILETYPE_PNG 1
-#define FILETYPE_JPG 2
+#include "picosstvpp.h"
 
 // =========
 // globals
@@ -68,42 +26,18 @@ uint16_t   g_rate;
  File input_file;
  File output_file;
 
-// ========
-// protos
-// ========
+byte sstv_pwm_pin;
 
-//uint8_t  filetype       (char *filename) ;
-void     playtone       (uint16_t tonefreq , double tonedur) ;
-void     addvisheader   (void) ;
-void     addvistrailer  (void) ;
-
-uint16_t toneval_rgb        (uint8_t colorval) ;
-uint16_t toneval_yuv        (uint8_t colorval) ;
-
-void     buildaudio_m     (double pixeltime) ;
-void     buildaudio_s     (double pixeltime) ;
-void     buildaudio_r36     (void) ;
-
-#ifdef AUDIO_AIFF
-void     writefile_aiff (void) ;
-#endif
-#ifdef AUDIO_WAV
-void     writefile_wav  (void) ;
-#endif
-
-void show_dir();
-void load_files();
-void play_pwm_file();
-
-void setup() {
+void picosstvpp_begin(int pin) {
 	
-  delay(10000);	
+  sstv_pwm_pin = pin;	
+//  delay(10000);	
   Serial.begin(115200);	
   show_dir();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
   LittleFS.remove("/sstv_image_1_320_x_240.jpg");
-   LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
 	
   Serial.println("Deleted cam.pwm");	
   show_dir();
@@ -114,7 +48,7 @@ void setup() {
 // ================
 
 // int main(int argc, char *argv[]) {
-void loop() {
+void picosstvpp() {
     char *protocol; 
 	int option;
 
@@ -291,7 +225,7 @@ void loop() {
     show_dir();
     delay(1000);	
     play_pwm_file();
-    delay(10000);	
+//    delay(10000);	
 //    return 0 ;
 }
 
