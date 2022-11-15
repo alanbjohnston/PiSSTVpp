@@ -64,7 +64,7 @@ FILE *     g_outfp ;
 uint16_t   g_rate;
 
  File input_file;
- File output_file
+ File output_file;
 
 // ========
 // protos
