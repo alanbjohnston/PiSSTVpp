@@ -933,13 +933,14 @@ void play_pwm_file() {
   byte lower;
   byte upper;
   Serial.println("Playing PWM file");	
-	
+  unsigned long sstv_micro_timer;
+	 
     dds_pwm_pin = 26;
    
     multiplier = 133E6 / (clock * wrap);
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f\n", clock, wrap, multiplier);
+    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", clock, wrap, multiplier, period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
@@ -952,16 +953,21 @@ void play_pwm_file() {
   
     Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
 	
-	
+  sstv_micro_timer = micros();		
   while (output_file.available()) {	
+	  
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
     upper = (octet & 0xf0) >> 4;
-//    Serial.printf("%d\n%d\n", lower, upper);	 
+//    Serial.printf("%d\n%d\n", lower, upper);	
+	  
+    while ((micros() - sstv_micro_timer) < period)	{ }   	  
     pwm_set_gpio_level(DDS_PWM_PIN, lower);
-    delayMicroseconds(period);
+    sstv_micro_timer = micros();	
+	  
+    while ((micros() - sstv_micro_timer) < period)	{ }   	
     pwm_set_gpio_level(DDS_PWM_PIN, upper);
-    delayMicroseconds(period);
+    sstv_micro_timer = micros();
   }
 	
   Serial.println("End");
