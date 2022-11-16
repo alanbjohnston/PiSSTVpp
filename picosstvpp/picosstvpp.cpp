@@ -1047,8 +1047,8 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
 //            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 1] = green; // JpegDec_pImg[1];
 //            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 2] = blue; // JpegDec_pImg[2];
 
-            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 1] = pixel_value & 0xff;  // JpegDec_pImg[0];
-            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 0] = (pixel_value & 0xff00) >> 8; // JpegDec_pImg[1];
+            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 0] = pixel_value & 0xff;  // JpegDec_pImg[0];
+            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 1] = (pixel_value & 0xff00) >> 8; // JpegDec_pImg[1];
 /*
 	    Serial.print(pixel_value & 0xff, HEX);
 	    Serial.print(" ");
