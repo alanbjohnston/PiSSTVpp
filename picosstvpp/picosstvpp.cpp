@@ -524,7 +524,7 @@ void buildaudio_s (double pixeltime) {
 		
             r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
             g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
-            b[x] = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
+            b[x] = 0xff; // (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
           
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
