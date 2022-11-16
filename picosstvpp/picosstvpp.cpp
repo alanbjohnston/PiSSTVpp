@@ -520,7 +520,7 @@ void buildaudio_s (double pixeltime) {
 //	    input_file.readBytes(buff, 3);
 	    input_file.readBytes(buff, 2);
 		
-	    pixel_value = buff[0] + 0xff * buff[1];
+	    pixel_value = buff[1] + 0xff * buff[0];
 		
             r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
             g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
