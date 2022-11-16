@@ -16,6 +16,7 @@
 //#include <unistd.h>
 #include "LittleFS.h"
 #include "hardware/pwm.h" 
+#include <TJpg_Decoder.h>
 
 //uint8_t  filetype       (char *filename) ;
 void     playtone       (uint16_t tonefreq , double tonedur) ;
@@ -42,6 +43,8 @@ void play_pwm_file();
 
 void picosstvpp_begin(int pin);
 void picosstvpp();
+void jpeg_decode(char* filename, char* fileout, bool debug);
+
 // ================
 // macros/defines
 // ================
