@@ -11,8 +11,11 @@
 // =========
 // globals
 // =========
-
+#ifdef SSTV_PWM
+uint16_t   g_audio[2];
+#else
 uint16_t   g_audio[MAXSAMPLES] ;
+#endif
 uint32_t   g_scale, g_samples ;
 double     g_twopioverrate , g_uspersample ; 
 double     g_theta, g_fudge ; 
@@ -302,36 +305,60 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     deltatheta = g_twopioverrate * tonefreq ;
     
     for ( i=1 ; i<=tonesamples ; i++ ) {
+#ifdef AUDIO_AIFF        
         g_samples++ ;
         
         if ( tonefreq == 0 ) { g_audio[i] = 32768 ; }
         else {
 
-#ifdef AUDIO_AIFF        
             voltage = 32768 + (int)( sin( g_theta ) * g_scale ) ;
-#endif
-#ifdef AUDIO_WAV
-            voltage =     0 + (int)( sin( g_theta ) * g_scale ) ;
-#endif    
-#ifdef SSTV_PWM
-            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;
-//	    Serial.println(voltage);	
-#endif  		
             g_audio[i] = voltage ;
             g_theta += deltatheta ;
+
         }
+#endif
+#ifdef AUDIO_WAV
+        g_samples++ ;
+        
+        if ( tonefreq == 0 ) { g_audio[i] = 32768 ; }
+        else {
+
+            voltage =     0 + (int)( sin( g_theta ) * g_scale ) ;
+            g_audio[i] = voltage ;
+            g_theta += deltatheta ;
+
+        }
+#endif    
+#ifdef SSTV_PWM
+	for(int j = 0; j < 2; j++) {	
+          g_samples++ ;
+        
+          if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }
+          else {
+
+            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;
+//	    Serial.println(voltage);	
+	    g_audio[j] = voltage ;
+            g_theta += deltatheta ;	
+
+          }
+	}
+	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
+	output_file.write(octet);
+	i++;   	    
+#endif  		
+
     } // end for i        
     
     g_fudge = tonedur - ( tonesamples * g_uspersample ) ;
-	
+/*	
     for ( i=1 ; i<=tonesamples ; i++ ) {
 #ifdef SSTV_PWM
-	byte octet = (g_audio[i] & 0xf) + (((g_audio[i+1] & 0xf)) << 4);    
-	output_file.write(octet);
-	i++;    
+ 
 #endif
 //	output_file.write(g_audio[i] & 0xff00);  
     }
+*/	
 }  // end playtone    
 
 uint16_t toneval_rgb ( uint8_t colorval ) {
