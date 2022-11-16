@@ -38,8 +38,9 @@ void picosstvpp_begin(int pin) {
   LittleFS.remove("/cam.pwm");
   LittleFS.remove("/sstv_image_1_320_x_240.jpg");
   LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+  LittleFS.remove("/cam2.bin");
 	
-  Serial.println("Deleted cam.pwm");	
+  Serial.println("Deleted files");	
   show_dir4();
 }
 
