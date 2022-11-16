@@ -910,7 +910,7 @@ void play_pwm_file() {
 
   delay(1000);	 
 	
- while (true) {	
+// while (true) {	
 	
   output_file = LittleFS.open("/cam.pwm", "r");
 	
@@ -935,5 +935,5 @@ void play_pwm_file() {
   Serial.println("End");
   output_file.close();	
   delay(5000);	 	 
- }	 
+// }	 
 }
