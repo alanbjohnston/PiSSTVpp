@@ -44,6 +44,7 @@ void play_pwm_file();
 void picosstvpp_begin(int pin);
 void picosstvpp();
 void jpeg_decode(char* filename, char* fileout, bool debug);
+void play_pwm_file();
 
 // ================
 // macros/defines
