@@ -503,7 +503,8 @@ void buildaudio_s (double pixeltime) {
     
     Serial.printf( "Adding image to audio data.\n" ) ;
 	
-    char buff[3];
+//    char buff[3];
+    uint16_t pixel_value;	
 	    
     //add starting sync pulse
     playtone( 1200 , 9000);
@@ -515,11 +516,17 @@ void buildaudio_s (double pixeltime) {
 //	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
 		
-	 input_file.readBytes(buff, 3);
+//	 input_file.readBytes(buff, 3);
+	 input_file.readBytes(&pixel_value, 2);
+		
+            r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
+            g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
+            b[x] = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
           
-          r[x] =  buff[0];
-          g[x] =  buff[1];
-          b[x] =  buff[2];			
+//          r[x] =  buff[0];
+//          g[x] =  buff[1];
+//          b[x] =  buff[2];	
+		
 //            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
             
             // get color data
@@ -833,7 +840,6 @@ void writefile_wav () {
     Serial.printf( "Done writing to audio file.\n" ) ;
 }
 #endif
-
         
 // end
 
@@ -972,7 +978,8 @@ int JpegDec_i;
 int JpegDec_j;
 int JpegDec_height = 240;
 int JpegDec_width = 320;
-byte  JpegDec_sortBuf[15360]; //320(px)*16(lines)*3(bytes) // Header buffer
+//byte  JpegDec_sortBuf[15360]; //320(px)*16(lines)*3(bytes) // Header buffer
+byte  JpegDec_sortBuf[320 * 16 * 2]; //320(px)*16(lines)*2(bytes) // Header buffer
 int JpegDec_pxSkip;
 uint8_t *JpegDec_pImg;
 int JpegDec_x, JpegDec_y, JpegDec_bx, JpegDec_by;
@@ -1011,22 +1018,29 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
             // First we write on the array 16 lines and then we save to SD
             JpegDec_pxSkip = ((JpegDec_y - (16 * JpegDec_j)) * 320) + JpegDec_x;
           
-            int pixel_value = *bitmap;
+//            int pixel_value = *bitmap;
+            byte pixel_value = *bitmap;
                       
-            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
-            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
-            byte blue_raw = (pixel_value & 0b0000000000011111);                
+//            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
+//            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
+//            byte blue_raw = (pixel_value & 0b0000000000011111);                
 
-            byte red = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
-            byte green = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
-            byte blue = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;            
+//            byte red = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
+//            byte green = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
+//            byte blue = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;            
           
-            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 0] = red;  // JpegDec_pImg[0];
-            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 1] = green; // JpegDec_pImg[1];
-            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 2] = blue; // JpegDec_pImg[2];
+//            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 0] = red;  // JpegDec_pImg[0];
+//            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 1] = green; // JpegDec_pImg[1];
+//            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 2] = blue; // JpegDec_pImg[2];
+
+            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 0] = pixel_value[0];  // JpegDec_pImg[0];
+            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 1] = pixel_value[1]; // JpegDec_pImg[1];
+		
 #ifdef DEBUG          
             Serial.print("sortBuf index = ");
-            Serial.println((3 * JpegDec_pxSkip));
+//            Serial.println((3 * JpegDec_pxSkip));
+            Serial.println((2 * JpegDec_pxSkip));
+
 #endif
             JpegDec_i++;
             if(JpegDec_i == 5120){ //320(px)x16(lines)
