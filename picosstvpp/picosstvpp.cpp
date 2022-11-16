@@ -509,7 +509,8 @@ void buildaudio_s (double pixeltime) {
     playtone( 1200 , 9000);
 
 //    for ( y=0 ; y<256 ; y++ ) {
-    for ( y=0 ; y<100 ; y++ ) {
+//    for ( y=0 ; y<100 ; y++ ) {
+    for ( y=0 ; y<240 ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
