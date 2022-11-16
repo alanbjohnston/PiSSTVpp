@@ -965,11 +965,11 @@ void play_pwm_file() {
 //    Serial.printf("%d\n%d\n", lower, upper);	
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	  
-    pwm_set_gpio_level(DDS_PWM_PIN, lower);
+    pwm_set_gpio_level(DDS_PWM_PIN, upper);
     sstv_micro_timer = micros();	
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	
-    pwm_set_gpio_level(DDS_PWM_PIN, upper);
+    pwm_set_gpio_level(DDS_PWM_PIN, lower);
     sstv_micro_timer = micros();
   }
 	
@@ -1121,7 +1121,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
 //  write_complete = false;
   
   TJpgDec.setJpgScale(1);
-  TJpgDec.setSwapBytes(true);    // was true
+  TJpgDec.setSwapBytes(false);    // was true
   TJpgDec.setCallback(get_block);  
   //TJpgDec.drawFsJpg(0, 0, "/cam.jpg", LittleFS);
   TJpgDec.drawFsJpg(0, 0, filename, LittleFS);
