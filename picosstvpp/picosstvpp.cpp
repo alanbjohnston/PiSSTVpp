@@ -33,14 +33,14 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
-  show_dir();	
+  show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
   LittleFS.remove("/sstv_image_1_320_x_240.jpg");
   LittleFS.remove("/sstv_image_2_320_x_240.jpg");
 	
   Serial.println("Deleted cam.pwm");	
-  show_dir();
+  show_dir4();
 }
 
 // ================
@@ -222,7 +222,7 @@ void picosstvpp() {
     uint32_t endtime = millis();	// time(NULL) ;
     Serial.printf( "Created soundfile in %d milliseconds.\n" , ( endtime - starttime ) ) ;
 	
-    show_dir();
+    show_dir4();
     delay(1000);	
     play_pwm_file();
 //    delay(10000);	
@@ -806,7 +806,7 @@ void writefile_wav () {
         
 // end
 
-void show_dir() {
+void show_dir4() {
   LittleFS.begin();
   Dir dir = LittleFS.openDir("/");
 // or Dir dir = LittleFS.openDir("/data");
