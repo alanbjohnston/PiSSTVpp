@@ -229,8 +229,8 @@ void picosstvpp() {
     Serial.printf( "Created soundfile in %d milliseconds.\n" , ( endtime - starttime ) ) ;
 	
     show_dir4();
-    delay(1000);	
-    play_pwm_file();
+//    delay(1000);	
+//    play_pwm_file();
 //    delay(10000);	
 //    return 0 ;
 }
