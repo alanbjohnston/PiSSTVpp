@@ -524,7 +524,7 @@ void buildaudio_s (double pixeltime) {
 		
             r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
             g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
-            b[x] = 0xff; // (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
+            b[x] = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
           
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
@@ -1121,7 +1121,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
 //  write_complete = false;
   
   TJpgDec.setJpgScale(1);
-  TJpgDec.setSwapBytes(false);    // was true
+  TJpgDec.setSwapBytes(true);    // was true
   TJpgDec.setCallback(get_block);  
   //TJpgDec.drawFsJpg(0, 0, "/cam.jpg", LittleFS);
   TJpgDec.drawFsJpg(0, 0, filename, LittleFS);
