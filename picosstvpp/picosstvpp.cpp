@@ -25,8 +25,9 @@ uint16_t   g_rate;
 
  File input_file;
  File output_file;
-
-byte sstv_pwm_pin;
+// File inFile;
+  File outFile;
+  byte sstv_pwm_pin;
 
 void picosstvpp_begin(int pin) {
 	
