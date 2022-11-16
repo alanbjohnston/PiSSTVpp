@@ -36,8 +36,8 @@ void     writefile_aiff (void) ;
 void     writefile_wav  (void) ;
 #endif
 
-void show_dir();
-void load_files();
+void show_dir4();
+//void load_files();
 void play_pwm_file();
 
 void picosstvpp_begin(int pin);
