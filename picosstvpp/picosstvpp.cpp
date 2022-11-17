@@ -975,6 +975,8 @@ void play_pwm_file() {
 	
   Serial.println("End");
   output_file.close();	
+	
+  digitalWrite(PTT_PIN, HIGH);  // stop transmit	
 //  delay(5000);	 	 
 // }	 
 }
