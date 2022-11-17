@@ -953,20 +953,6 @@ void play_pwm_file() {
   int dds_pin_slice;
   pwm_config dds_pwm_config;
   int period = 1E6 / clock;
-	
-#define PD_PIN 22 // SR_FRS_05W PD pin - enable
-#define PTT_PIN 17 // SR_FRS_05W PTT Push to Talk - transmit
-
-  Serial.println("Start transmit");	 
-	 
-  pinMode(PTT_PIN, OUTPUT);  // PTT active LOW
-  digitalWrite(PTT_PIN, LOW);
-//  digitalWrite(PTT_PIN, HIGH);  // don't transmit
-
-  pinMode(PD_PIN, OUTPUT);  // PD active HIGH
-  digitalWrite(PD_PIN, HIGH);  
-		
-	
   char octet;
   byte lower;
   byte upper;
@@ -1020,8 +1006,7 @@ void play_pwm_file() {
 	
   Serial.println("End");
   output_file.close();	
-	
-  digitalWrite(PTT_PIN, HIGH);  // stop transmit	
+
 //  delay(5000);	 	 
 // }	 
 }
