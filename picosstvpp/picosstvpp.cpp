@@ -363,7 +363,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 }  // end playtone    
 
 uint16_t toneval_rgb ( uint8_t colorval ) {
-    return ( ( 800 * colorval ) / 256 ) + 1500 + 10 ;
+    return ( ( 800 * colorval ) / 256 ) + 1500 + 50 ;
 }
 
 uint16_t toneval_yuv ( uint8_t colorval ) {
