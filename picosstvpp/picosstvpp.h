@@ -40,7 +40,7 @@ void     writefile_wav  (void) ;
 
 void show_dir4();
 //void load_files();
-void play_pwm_file();
+void play_pwm_file(int dds_pwm_pin) ;
 
 void picosstvpp_begin(int pin);
 void picosstvpp();
