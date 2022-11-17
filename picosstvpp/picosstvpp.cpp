@@ -900,7 +900,7 @@ void load_files() {
 
 void play_pwm_file() {
 	
-  set_sys_clock_khz(133000, true);  	
+  set_sys_clock_khz(125000, true);  	
   #define DDS_PWM_PIN 26
   int dds_pwm_pin = DDS_PWM_PIN;	
   int clock = RATE; // 11.025E3; // was 22E3 50E3;
