@@ -337,7 +337,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }
           else {
 
-            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;
+//            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
+            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; range is -1 to wrap + 1
 //	    Serial.println(voltage);	
 	    g_audio[j] = voltage ;
             g_theta += deltatheta ;	
@@ -814,7 +815,7 @@ void writefile_wav () {
     uint32_t i ;
     
     audiosize  = g_samples * CHANS * (BITS / 8) ; // bytes of audio
-    totalsize  = 4 + (8 + 16) + (8 + audiosize) ; // audio + some headers
+    totalsize  = 4 + (8 + 16) + (8 + audiosize) ; // audio + some headers  
     byterate   = g_rate * CHANS * BITS / 8 ;        // audio bytes / sec
     blockalign = CHANS * BITS / 8 ;               // total bytes / sample
     
@@ -942,14 +943,15 @@ void load_files() {
 }
 */
 
-void play_pwm_file() {
+void play_pwm_file(int dds_pwm_pin) {
 	
-  set_sys_clock_khz(133000, true);  	
-  #define DDS_PWM_PIN 26
-  int dds_pwm_pin = DDS_PWM_PIN;	
+  set_sys_clock_khz(133000, true);
+	
+//  #define DDS_PWM_PIN 26
+//   = DDS_PWM_PIN;	
   int clock = RATE; // 11.025E3; // was 22E3 50E3;
   float multiplier;
-  int wrap = 5;  // was 10; // 5;
+  int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
   int period = 1E6 / clock;
@@ -961,12 +963,12 @@ void play_pwm_file() {
 	 
     dds_pwm_pin = 26;
    
-    multiplier = 133E6 / (clock * wrap);
-//    multiplier = 125E6 / (clock * wrap);
+    multiplier = 133E6 / (clock * (wrap + 1));
+//    multiplier = 125E6 / (clock * (wrap + 1));
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", clock, wrap, multiplier, period);
+    Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", clock, wrap, multiplier, period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
@@ -975,11 +977,10 @@ void play_pwm_file() {
     pwm_config_set_clkdiv(&dds_pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
     pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
     pwm_init(dds_pin_slice, &dds_pwm_config, true);
-    pwm_set_gpio_level(dds_pwm_pin, (dds_pwm_config.top + 1) * 0.5);
+    pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
   
     Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
-	 
-
+	
   delay(1000);	 
 	
 // while (true) {	
@@ -996,11 +997,11 @@ void play_pwm_file() {
 //    Serial.printf("%d\n%d\n", lower, upper);	
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	  
-    pwm_set_gpio_level(DDS_PWM_PIN, lower);
+    pwm_set_gpio_level(dds_pwm_pin, lower);
     sstv_micro_timer = micros();	
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	
-    pwm_set_gpio_level(DDS_PWM_PIN, upper);
+    pwm_set_gpio_level(dds_pwm_pin, upper);
     sstv_micro_timer = micros();
   }
 	
