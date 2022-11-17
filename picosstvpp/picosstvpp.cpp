@@ -931,8 +931,8 @@ void play_pwm_file() {
 	 
     dds_pwm_pin = 26;
    
-//    multiplier = 133E6 / (clock * wrap);
-    multiplier = 125E6 / (clock * wrap);
+    multiplier = 133E6 / (clock * wrap);
+//    multiplier = 125E6 / (clock * wrap);
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
