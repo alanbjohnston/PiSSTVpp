@@ -516,7 +516,7 @@ void buildaudio_s (double pixeltime) {
         // read image data
 //	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
-
+/*
 	if ( x < 100) {
 		r[x] = 0xff;
 		g[x] = 0;		
@@ -532,7 +532,8 @@ void buildaudio_s (double pixeltime) {
 		g[x] = 0;		
 		b[x] = 0xff;	
 	}
-		/*
+*/		
+		/**/
 //	    input_file.readBytes(buff, 3);
 	    input_file.readBytes(buff, 2);
 		
@@ -541,7 +542,7 @@ void buildaudio_s (double pixeltime) {
             r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
             g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
             b[x] = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
-*/          
+/**/          
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
 //          b[x] =  buff[2];	
@@ -1044,6 +1045,14 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
           
 //            int pixel_value = *bitmap;
             uint16_t pixel_value = *bitmap;
+	
+	        if (y < 100) 
+		    pixel_value = 0xf800;
+		else if (y < 200)
+		    pixel_value = 0x7E0;
+		else
+		    pixel_value = 0x1f;
+			
                       
 //            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
 //            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
