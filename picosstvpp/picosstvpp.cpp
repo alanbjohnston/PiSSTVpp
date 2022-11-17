@@ -516,7 +516,23 @@ void buildaudio_s (double pixeltime) {
         // read image data
 //	Serial.println("Starting row");    
         for ( x=0 ; x<320 ; x++ ) {
-		
+
+	if ( x < 100) {
+		r[x] = 0xff;
+		g[x] = 0;		
+		b[x] = 0;	
+	}
+	else if ( x < 200) {
+		r[x] = 0;
+		g[x] = 0xff;		
+		b[x] = 0;	
+	}
+	else {	
+		r[x] = 0;
+		g[x] = 0;		
+		b[x] = 0xff;	
+	}
+		/*
 //	    input_file.readBytes(buff, 3);
 	    input_file.readBytes(buff, 2);
 		
@@ -525,7 +541,7 @@ void buildaudio_s (double pixeltime) {
             r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
             g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
             b[x] = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;    		
-          
+*/          
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
 //          b[x] =  buff[2];	
