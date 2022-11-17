@@ -17,8 +17,7 @@
 #include "LittleFS.h"
 #include "hardware/pwm.h" 
 #include <TJpg_Decoder.h>
-#include "hardware/irq.h"  // interrupts
-#include "hardware/sync.h" // wait for interrupt 
+#include "pico/stdlib.h"   // stdlib 
 
 //uint8_t  filetype       (char *filename) ;
 void     playtone       (uint16_t tonefreq , double tonedur) ;
