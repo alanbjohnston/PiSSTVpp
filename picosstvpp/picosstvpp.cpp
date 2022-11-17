@@ -537,7 +537,7 @@ void buildaudio_s (double pixeltime) {
 //	    input_file.readBytes(buff, 3);
 	    input_file.readBytes(buff, 2);
 		
-	    pixel_value = buff[0] + 0xff * buff[1];
+	    pixel_value = buff[0] + buff[1] << 8;
 		
            Serial.print(pixel_value, HEX);
 	  Serial.print(" ");
