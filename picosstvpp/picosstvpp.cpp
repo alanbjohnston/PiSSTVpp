@@ -558,8 +558,8 @@ void buildaudio_s (double pixeltime) {
 	    Serial.print(blue_raw, HEX);
 	    Serial.print(" / ");			
 		
-            r[x] = (float)((red_raw) * 255.0/31.0;
-            g[x] = (float)((green_raw) >> 5) * 255.0/63.0;
+            r[x] = (float)(red_raw) * 255.0/31.0;
+            g[x] = (float)(green_raw) * 255.0/63.0;
             b[x] = (float)(blue_raw) * 255.0/31.0;    	
 /**/		
 	    Serial.print(r[x], HEX);
