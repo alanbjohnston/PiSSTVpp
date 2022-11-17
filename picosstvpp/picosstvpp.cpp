@@ -538,7 +538,7 @@ void buildaudio_s (double pixeltime) {
 	    input_file.readBytes(buff, 2);
 		
 	    pixel_value = buff[0] + (buff[1] << 8);  // back
-		
+/*		
            Serial.print(pixel_value, HEX);
   	   Serial.print(" ^ ");
 		
@@ -546,29 +546,29 @@ void buildaudio_s (double pixeltime) {
 	  Serial.print(" ");
            Serial.print(buff[0], HEX);
 	  Serial.print(" | ");
-		
+*/		
             byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
             byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
             byte blue_raw = (pixel_value & 0b0000000000011111);   
-		
+/*		
 	    Serial.print(red_raw, HEX);
 	    Serial.print(" ");
 	    Serial.print(green_raw, HEX);
 	    Serial.print(" ");
 	    Serial.print(blue_raw, HEX);
 	    Serial.print(" / ");			
-		
+*/		
             r[x] = (float)(red_raw) * 255.0/31.0;
             g[x] = (float)(green_raw) * 255.0/63.0;
             b[x] = (float)(blue_raw) * 255.0/31.0;    	
-/**/		
+/*		
 	    Serial.print(r[x], HEX);
 	    Serial.print(" ");
 	    Serial.print(g[x], HEX);
 	    Serial.print(" ");
 	    Serial.print(b[x], HEX);
 	    Serial.print(" + ");	
-/**/		
+*/		
 /**/          
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
@@ -1072,14 +1072,14 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
           
 //            int pixel_value = *bitmap;
             uint16_t pixel_value = *bitmap;
-	
+/*	
 	        if (y < 100) 
 		    pixel_value = 0xf800;
 		else if (y < 200)
 		    pixel_value = 0x7E0;
 		else
 		    pixel_value = 0x1f;
-			
+*/			
                       
 //            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
 //            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
@@ -1104,13 +1104,13 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
 
             JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 0] = pixel_value & 0xff;  // JpegDec_pImg[0];
             JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 1] = (pixel_value & 0xff00) >> 8; // JpegDec_pImg[1];
-/**/
+/*
 	    Serial.print((pixel_value & 0xff00) >> 8, HEX);		
 	    Serial.print(pixel_value & 0xff, HEX);
 //	    Serial.print(" ");
 	    Serial.print(" ");			
 		
-/**/		
+*/		
 #ifdef DEBUG          
             Serial.print("sortBuf index = ");
 //            Serial.println((3 * JpegDec_pxSkip));
