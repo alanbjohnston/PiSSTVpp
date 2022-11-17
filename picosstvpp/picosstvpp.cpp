@@ -537,15 +537,15 @@ void buildaudio_s (double pixeltime) {
 //	    input_file.readBytes(buff, 3);
 	    input_file.readBytes(buff, 2);
 		
-	    pixel_value = buff[1] + buff[0] << 8;  // switched
+	    pixel_value = buff[0] + buff[1] << 8;  // back
 		
 //           Serial.print(pixel_value, HEX);
 //	  Serial.print(" ");
 		
-           Serial.print(buff[0], HEX);
-	  Serial.print(" ");
            Serial.print(buff[1], HEX);
-	  Serial.print("|");
+	  Serial.print(" ");
+           Serial.print(buff[0], HEX);
+	  Serial.print(" | ");
 		
             r[x] = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
             g[x] = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
@@ -1094,9 +1094,9 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
             JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 0] = pixel_value & 0xff;  // JpegDec_pImg[0];
             JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 1] = (pixel_value & 0xff00) >> 8; // JpegDec_pImg[1];
 /**/
+	    Serial.print((pixel_value & 0xff00) >> 8, HEX);		
 	    Serial.print(pixel_value & 0xff, HEX);
 //	    Serial.print(" ");
-	    Serial.print((pixel_value & 0xff00) >> 8, HEX);
 	    Serial.print(" ");			
 		
 /**/		
