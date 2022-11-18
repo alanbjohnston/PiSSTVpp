@@ -51,7 +51,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug);
 // ================
 
 #define RATE   22000 // 11025 
-#define WRAP 7
+#define WRAP 5
 #define MAXRATE   22050
 #define BITS   16
 #define CHANS  1 
