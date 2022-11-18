@@ -1022,7 +1022,7 @@ void play_pwm_file(int dds_pwm_pin) {
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
     upper = (octet & 0xf0) >> 4;
-    Serial.printf("%d\n%d\n", lower, upper);	
+//    Serial.printf("%d\n%d\n", lower, upper);	
 	  
     while ((micros() - sstv_micro_timer) < pwm_period)	{ }   	  
     pwm_set_gpio_level(dds_pwm_pin, lower);
