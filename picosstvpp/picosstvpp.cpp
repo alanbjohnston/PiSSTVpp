@@ -390,11 +390,18 @@ void addvisheader() {
     // bit of silence
 
 	
-    playtone(1100, 900000);
-    playtone(1200, 900000);
-	    playtone(1300, 900000);
-	    playtone(1400, 900000);
-		    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+	
+  sstv_stop_write = true;	
 //    return;	
 	
     playtone(    0 , 500000 ) ;   
