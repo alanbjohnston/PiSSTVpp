@@ -300,7 +300,9 @@ uint8_t filetype( char *filename ) {
 void playtone( uint16_t tonefreq , double tonedur ) {
     uint16_t tonesamples, voltage, i ;
     double   deltatheta ;
-     
+    
+    tonefreq += 25;  // increase frequency by 25 Hz
+	
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
     if (tonesamples > MAXSAMPLES) {
