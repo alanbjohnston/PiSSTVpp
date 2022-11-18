@@ -73,7 +73,7 @@ void picosstvpp_begin(int pin) {
     
     Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
 
-    gpio_set_function(pwm_pwm_pin, GPIO_FUNC_PWM);
+    gpio_set_function(sstv_pwm_pin, GPIO_FUNC_PWM);
     pwm_pin_slice = pwm_gpio_to_slice_num(sstv_pwm_pin);
 
     pwm_config = pwm_get_default_config();
