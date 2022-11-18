@@ -999,7 +999,7 @@ void play_pwm_file(int dds_pwm_pin) {
 	
 	 
   sstv_micro_timer = micros();		
-  while (output_file.available()) {	
+  while (output_file.available() && !sstv_stop) {	
 	  
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
