@@ -52,7 +52,7 @@ void sstv_end();
 // ================
 
 #define RATE   22000 // 11025 
-#define WRAP 4 // 5
+#define WRAP 5
 #define MAXRATE   22050
 #define BITS   16
 #define CHANS  1 
