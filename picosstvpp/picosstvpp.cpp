@@ -31,6 +31,7 @@ uint16_t   g_rate;
 // File inFile;
   File outFile;
   byte sstv_pwm_pin;
+  bool sstv_stop = false;
 
 void picosstvpp_begin(int pin) {
 	
@@ -47,6 +48,7 @@ void picosstvpp_begin(int pin) {
 	
   Serial.println("Deleted files");	
   show_dir4();
+
 }
 
 // ================
@@ -57,7 +59,7 @@ void picosstvpp_begin(int pin) {
 void picosstvpp() {
     char *protocol; 
 	int option;
-
+      sstv_stop = false;
     g_rate = WRAP * 4000; //RATE;
     g_protocol = 56; //Scottie 2
 /*	
@@ -205,8 +207,8 @@ void picosstvpp() {
             break;
     }
 
-
-    addvistrailer() ;
+    if (!sstv_stop)
+      addvistrailer() ;
 /**/	
     
 #ifdef AUDIO_AIFF    
@@ -347,7 +349,11 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           }
 	}
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
-	output_file.write(octet);
+	int result = output_file.write(octet);
+	if (result < 1) {
+	  sstv_stop = true;
+	  Serial.println("File write error");	
+	}
 	i++;   	    
 #endif  		
 
@@ -514,10 +520,10 @@ void buildaudio_s (double pixeltime) {
 
 //    for ( y=0 ; y<256 ; y++ ) {
 //    for ( y=0 ; y<100 ; y++ ) {
-    for ( y=0 ; y<240 ; y++ ) {
+    for ( y=0 ; (y<240 && !sstv_stop) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-        for ( x=0 ; x<320 ; x++ ) {
+        for ( x=0 ; (x<320 && !sstv_stop) ; x++ ) {
 /*
 	if ( x < 100) {
 		r[x] = 0xff;
@@ -587,14 +593,14 @@ void buildaudio_s (double pixeltime) {
         playtone(1500, 1500);
         
         // add audio for green channel for this row
-        for ( k=0 ; k<320 ; k++ )
+        for ( k=0 ; (k<320 && !sstv_stop)  ; k++ )
             playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 
         // separator tone 
         playtone(1500, 1500) ;
 
         // blue channel
-        for ( k=0 ; k<320 ; k++ )
+        for ( k=0 ; (k<320 && !sstv_stop) ; k++ )
             playtone( toneval_rgb( b[k] ) , pixeltime ) ; 
      
 
@@ -605,7 +611,7 @@ void buildaudio_s (double pixeltime) {
         playtone(1500 , 1500) ;
 
         // red channel
-        for ( k=0 ; k<320 ; k++ )
+        for ( k=0 ; (k<320 && !sstv_stop)  ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
 //       Serial.println("Ending row");    
@@ -1219,4 +1225,8 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   if (debug)
     Serial.println("Bin has been written to FS");
   outFile.close();
+}
+
+void sstv_end() {
+  sstv_stop = true;
 }
