@@ -58,7 +58,7 @@ void picosstvpp() {
     char *protocol; 
 	int option;
 
-    g_rate = RATE;
+    g_rate = WRAP * 4000; //RATE;
     g_protocol = 56; //Scottie 2
 /*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
@@ -950,12 +950,12 @@ void play_pwm_file(int dds_pwm_pin) {
 	
 //  #define DDS_PWM_PIN 26
 //   = DDS_PWM_PIN;	
-  int clock = RATE; // 11.025E3; // was 22E3 50E3;
+//  int clock = RATE; // 11.025E3; // was 22E3 50E3;
   float multiplier;
   int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
-  int period = 1E6 / clock;
+  int period = 1E6 / g_rate;  // clock;
   char octet;
   byte lower;
   byte upper;
