@@ -978,7 +978,7 @@ void play_pwm_file(int dds_pwm_pin) {
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", clock, wrap, multiplier, period);
+    Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
