@@ -301,7 +301,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     uint16_t tonesamples, voltage, i ;
     double   deltatheta ;
     
-    tonefreq += 20;  // increase frequency by 20 Hz
+//    tonefreq += 20;  // increase frequency by 20 Hz
+    tonefreq *= 1.01333;  // increase frequency by scale.
 	
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
