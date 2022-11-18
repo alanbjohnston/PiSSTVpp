@@ -32,6 +32,7 @@ uint16_t   g_rate;
   File outFile;
   byte sstv_pwm_pin;
   bool sstv_stop = false;
+  bool sstv_stop_write = false;
 
 void picosstvpp_begin(int pin) {
 	
@@ -58,8 +59,9 @@ void picosstvpp_begin(int pin) {
 // int main(int argc, char *argv[]) {
 void picosstvpp() {
     char *protocol; 
-	int option;
-      sstv_stop = false;
+    int option;
+    sstv_stop = false;
+    sstv_stop_write = false;
     g_rate = WRAP * 4000; //RATE;
     g_protocol = 56; //Scottie 2
 /*	
@@ -307,7 +309,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     }
     deltatheta = g_twopioverrate * tonefreq ;
     
-    for ( i=1 ; i<=tonesamples ; i++ ) {
+    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop); i++ ) {
 #ifdef AUDIO_AIFF        
         g_samples++ ;
         
@@ -351,7 +353,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
 	int result = output_file.write(octet);
 	if (result < 1) {
-	  sstv_stop = true;
+	  sstv_stop_write = true;
 	  Serial.println("File write error");	
 	}
 	i++;   	    
@@ -520,10 +522,10 @@ void buildaudio_s (double pixeltime) {
 
 //    for ( y=0 ; y<256 ; y++ ) {
 //    for ( y=0 ; y<100 ; y++ ) {
-    for ( y=0 ; (y<240 && !sstv_stop) ; y++ ) {
+    for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-        for ( x=0 ; (x<320 && !sstv_stop) ; x++ ) {
+        for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
 /*
 	if ( x < 100) {
 		r[x] = 0xff;
@@ -593,14 +595,14 @@ void buildaudio_s (double pixeltime) {
         playtone(1500, 1500);
         
         // add audio for green channel for this row
-        for ( k=0 ; (k<320 && !sstv_stop)  ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
             playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 
         // separator tone 
         playtone(1500, 1500) ;
 
         // blue channel
-        for ( k=0 ; (k<320 && !sstv_stop) ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
             playtone( toneval_rgb( b[k] ) , pixeltime ) ; 
      
 
@@ -611,7 +613,7 @@ void buildaudio_s (double pixeltime) {
         playtone(1500 , 1500) ;
 
         // red channel
-        for ( k=0 ; (k<320 && !sstv_stop)  ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
 //       Serial.println("Ending row");    
