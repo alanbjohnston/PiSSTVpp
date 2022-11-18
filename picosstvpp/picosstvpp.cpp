@@ -57,6 +57,7 @@ void picosstvpp_begin(int pin) {
 //  #define DDS_PWM_PIN 26
 //   = DDS_PWM_PIN;	
 //  int clock = RATE; // 11.025E3; // was 22E3 50E3;
+  g_rate = WRAP * 4400; //RATE;	
   float multiplier;
   int wrap = WRAP;  // was 10; // 5;
   int pwm_pin_slice;
@@ -100,7 +101,6 @@ void picosstvpp() {
     int option;
     sstv_stop = false;
     sstv_stop_write = false;
-    g_rate = WRAP * 4400; //RATE;
     g_protocol = 56; //Scottie 2
 /*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
