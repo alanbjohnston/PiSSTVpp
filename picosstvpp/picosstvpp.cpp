@@ -34,6 +34,7 @@ uint16_t   g_rate;
   bool sstv_stop = false;
   bool sstv_stop_write = false;
   bool pwm_started = false;
+  int period;
 
 void picosstvpp_begin(int pin) {
 	
@@ -58,10 +59,11 @@ void picosstvpp_begin(int pin) {
 //  int clock = RATE; // 11.025E3; // was 22E3 50E3;
   float multiplier;
   int wrap = WRAP;  // was 10; // 5;
-  int dds_pin_slice;
-  pwm_config dds_pwm_config;
-	 
-    dds_pwm_pin = 26;
+  int pwm_pin_slice;
+  pwm_config pwm_config;
+
+  period = 1E6 / g_rate;  // clock;	
+//    dds_pwm_pin = 26;
    
 //    multiplier = 133E6 / (clock * (wrap + 1));
     multiplier = 133E6 / (g_rate * (wrap + 1));
@@ -71,17 +73,17 @@ void picosstvpp_begin(int pin) {
     
     Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
 
-    gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
-    dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
+    gpio_set_function(pwm_pwm_pin, GPIO_FUNC_PWM);
+    pwm_pin_slice = pwm_gpio_to_slice_num(sstv_pwm_pin);
 
-    dds_pwm_config = pwm_get_default_config();
-    pwm_config_set_clkdiv(&dds_pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
-    pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
-    pwm_init(dds_pin_slice, &dds_pwm_config, true);
-    pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
+    pwm_config = pwm_get_default_config();
+    pwm_config_set_clkdiv(&pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
+    pwm_config_set_wrap(&pwm_config, wrap); // 3 
+    pwm_init(pwm_pin_slice, &pwm_config, true);
+    pwm_set_gpio_level(sstv_pwm_pin, 0); // (pwm_config.top + 1) * 0.5);
   
     pwm_started = true;	
-//    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
+//    Serial.printf("PWM config.top: %d\n", pwm_config.top);
 	
 //  delay(1000);	 
 	
@@ -1001,7 +1003,6 @@ void load_files() {
 
 void play_pwm_file(int dds_pwm_pin) {
 	
-  int period = 1E6 / g_rate;  // clock;
   char octet;
   byte lower;
   byte upper;
