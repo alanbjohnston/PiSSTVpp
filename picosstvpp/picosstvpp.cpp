@@ -34,7 +34,7 @@ uint16_t   g_rate;
   bool sstv_stop = false;
   bool sstv_stop_write = false;
   bool pwm_started = false;
-  int period;
+  int pwm_period;
 
 void picosstvpp_begin(int pin) {
 	
@@ -62,7 +62,7 @@ void picosstvpp_begin(int pin) {
   int pwm_pin_slice;
   pwm_config pwm_config;
 
-  period = 1E6 / g_rate;  // clock;	
+  pwm_period = 1E6 / g_rate;  // clock;	
 //    dds_pwm_pin = 26;
    
 //    multiplier = 133E6 / (clock * (wrap + 1));
@@ -71,7 +71,7 @@ void picosstvpp_begin(int pin) {
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
+    Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, pwm_period);
 
     gpio_set_function(sstv_pwm_pin, GPIO_FUNC_PWM);
     pwm_pin_slice = pwm_gpio_to_slice_num(sstv_pwm_pin);
@@ -1025,11 +1025,11 @@ void play_pwm_file(int dds_pwm_pin) {
     upper = (octet & 0xf0) >> 4;
 //    Serial.printf("%d\n%d\n", lower, upper);	
 	  
-    while ((micros() - sstv_micro_timer) < period)	{ }   	  
+    while ((micros() - sstv_micro_timer) < pwm_period)	{ }   	  
     pwm_set_gpio_level(dds_pwm_pin, lower);
     sstv_micro_timer = micros();	
 	  
-    while ((micros() - sstv_micro_timer) < period)	{ }   	
+    while ((micros() - sstv_micro_timer) < pwm_period)	{ }   	
     pwm_set_gpio_level(dds_pwm_pin, upper);
     sstv_micro_timer = micros();
   }
