@@ -62,7 +62,7 @@ void picosstvpp() {
     int option;
     sstv_stop = false;
     sstv_stop_write = false;
-    g_rate = WRAP * 4000; //RATE;
+    g_rate = WRAP * 4400; //RATE;
     g_protocol = 56; //Scottie 2
 /*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
@@ -954,7 +954,7 @@ void load_files() {
 
 void play_pwm_file(int dds_pwm_pin) {
 	
-  set_sys_clock_khz(125000, true);
+  set_sys_clock_khz(133000, true);
 	
 //  #define DDS_PWM_PIN 26
 //   = DDS_PWM_PIN;	
