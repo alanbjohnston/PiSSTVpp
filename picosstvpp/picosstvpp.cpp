@@ -1002,15 +1002,23 @@ void play_pwm_file(int dds_pwm_pin) {
   
     Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
 	
-  delay(1000);	 
+//  delay(1000);	 
 	
 // while (true) {	
 	
   output_file = LittleFS.open("/cam.pwm", "r");
 	
-	 
+  long prompt_count_max = 1E6 / period;
+  long prompt_count = 0;	
+	
   sstv_micro_timer = micros();		
   while (output_file.available() && !sstv_stop) {	
+
+    prompt_count++;
+    if (prompt_count > prompt_count_max) {
+	prompt_count = 0;
+	Serial.println("Prompt!\n");    
+    }
 	  
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
