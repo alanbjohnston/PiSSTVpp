@@ -52,7 +52,7 @@ void picosstvpp_begin(int pin) {
   Serial.println("Deleted files");	
   show_dir4();
 
-  set_sys_clock_khz(133000, true);
+///  set_sys_clock_khz(133000, true);
 	
 //  #define DDS_PWM_PIN 26
 //   = DDS_PWM_PIN;	
