@@ -39,15 +39,16 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
+  Serial.println("picosstvpp v0.1 starting");	
   show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
 //  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
-//  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
   LittleFS.remove("/cam2.bin");
   LittleFS.remove("/cam.bin");
 	
-  Serial.println("Deleted files");	
+  Serial.println("Deleted some files");	
   show_dir4();
 
 }
