@@ -8,6 +8,8 @@
 
 #include "picosstvpp.h"
 
+extern bool TimerHandler1(struct repeating_timer *t);
+
 // =========
 // globals
 // =========
