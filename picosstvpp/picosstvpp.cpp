@@ -1000,7 +1000,7 @@ void play_pwm_file(int dds_pwm_pin) {
     pwm_init(dds_pin_slice, &dds_pwm_config, true);
     pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
   
-    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
+//    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
 	
 //  delay(1000);	 
 	
@@ -1170,7 +1170,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   
   if (outFile) {
 //    if (debug)
-      Serial.printf("Output opened %s", fileout);
+      Serial.printf("Output opened %s\n", fileout);
   }
   else
     Serial.println("Failed to open output");
