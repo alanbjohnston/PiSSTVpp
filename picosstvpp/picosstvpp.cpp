@@ -8,8 +8,6 @@
 
 #include "picosstvpp.h"
 
-extern bool TimerHandler1(struct repeating_timer *t);
-
 // =========
 // globals
 // =========
@@ -1019,8 +1017,7 @@ void play_pwm_file(int dds_pwm_pin) {
     prompt_count++;
     if (prompt_count > prompt_count_max) {
 	prompt_count = 0;
-//	Serial.println("Prompt!\n");    
-	TimerHandler1();
+//	Serial.println("Prompt!\n");    // in future, add button prompt
     }
 	  
     output_file.readBytes(&octet, 1);
