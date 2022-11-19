@@ -1017,7 +1017,8 @@ void play_pwm_file(int dds_pwm_pin) {
     prompt_count++;
     if (prompt_count > prompt_count_max) {
 	prompt_count = 0;
-	Serial.println("Prompt!\n");    
+//	Serial.println("Prompt!\n");    
+	TimerHandler1();
     }
 	  
     output_file.readBytes(&octet, 1);
