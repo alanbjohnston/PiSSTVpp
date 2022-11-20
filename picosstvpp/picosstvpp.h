@@ -40,17 +40,19 @@ void     writefile_wav  (void) ;
 
 void show_dir4();
 //void load_files();
-void play_pwm_file();
+void play_pwm_file(int dds_pwm_pin) ;
 
 void picosstvpp_begin(int pin);
 void picosstvpp();
 void jpeg_decode(char* filename, char* fileout, bool debug);
+void sstv_end();
 
 // ================
 // macros/defines
 // ================
 
 #define RATE   22000 // 11025 
+#define WRAP 5
 #define MAXRATE   22050
 #define BITS   16
 #define CHANS  1 

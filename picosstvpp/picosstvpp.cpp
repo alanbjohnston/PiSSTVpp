@@ -31,22 +31,26 @@ uint16_t   g_rate;
 // File inFile;
   File outFile;
   byte sstv_pwm_pin;
+  bool sstv_stop = false;
+  bool sstv_stop_write = false;
 
 void picosstvpp_begin(int pin) {
 	
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
+  Serial.println("picosstvpp v0.1 starting");	
   show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
 //  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
-//  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
   LittleFS.remove("/cam2.bin");
   LittleFS.remove("/cam.bin");
 	
-  Serial.println("Deleted files");	
+  Serial.println("Deleted some files");	
   show_dir4();
+
 }
 
 // ================
@@ -56,9 +60,10 @@ void picosstvpp_begin(int pin) {
 // int main(int argc, char *argv[]) {
 void picosstvpp() {
     char *protocol; 
-	int option;
-
-    g_rate = RATE;
+    int option;
+    sstv_stop = false;
+    sstv_stop_write = false;
+    g_rate = WRAP * 4400; //RATE;
     g_protocol = 56; //Scottie 2
 /*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
@@ -205,8 +210,8 @@ void picosstvpp() {
             break;
     }
 
-
-    addvistrailer() ;
+    if (!sstv_stop)
+      addvistrailer() ;
 /**/	
     
 #ifdef AUDIO_AIFF    
@@ -296,7 +301,10 @@ uint8_t filetype( char *filename ) {
 void playtone( uint16_t tonefreq , double tonedur ) {
     uint16_t tonesamples, voltage, i ;
     double   deltatheta ;
-     
+    
+//    tonefreq += 20;  // increase frequency by 20 Hz
+//    tonefreq *= 1.01333;  // increase frequency by scale.
+	
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
     if (tonesamples > MAXSAMPLES) {
@@ -305,7 +313,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     }
     deltatheta = g_twopioverrate * tonefreq ;
     
-    for ( i=1 ; i<=tonesamples ; i++ ) {
+    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop); i++ ) {
 #ifdef AUDIO_AIFF        
         g_samples++ ;
         
@@ -337,7 +345,9 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }
           else {
 
-            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;
+//            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
+//            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 0)) ; //   range is 1 to wrap - 1
+            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; // was + 1  range is -1 to wrap + 1
 //	    Serial.println(voltage);	
 	    g_audio[j] = voltage ;
             g_theta += deltatheta ;	
@@ -345,7 +355,11 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           }
 	}
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
-	output_file.write(octet);
+	int result = output_file.write(octet);
+	if (result < 1) {
+	  sstv_stop_write = true;
+	  Serial.println("File write error");	
+	}
 	i++;   	    
 #endif  		
 
@@ -379,12 +393,20 @@ void addvisheader() {
     
     // bit of silence
 
+/*	
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
+    playtone(1500, 900000);
 	
-    playtone(1100, 900000);
-    playtone(1200, 900000);
-	    playtone(1300, 900000);
-	    playtone(1400, 900000);
-		    playtone(1500, 900000);
+  sstv_stop_write = true;
+*/	
 //    return;	
 	
     playtone(    0 , 500000 ) ;   
@@ -512,10 +534,10 @@ void buildaudio_s (double pixeltime) {
 
 //    for ( y=0 ; y<256 ; y++ ) {
 //    for ( y=0 ; y<100 ; y++ ) {
-    for ( y=0 ; y<240 ; y++ ) {
+    for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-        for ( x=0 ; x<320 ; x++ ) {
+        for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
 /*
 	if ( x < 100) {
 		r[x] = 0xff;
@@ -585,14 +607,14 @@ void buildaudio_s (double pixeltime) {
         playtone(1500, 1500);
         
         // add audio for green channel for this row
-        for ( k=0 ; k<320 ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
             playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 
         // separator tone 
         playtone(1500, 1500) ;
 
         // blue channel
-        for ( k=0 ; k<320 ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
             playtone( toneval_rgb( b[k] ) , pixeltime ) ; 
      
 
@@ -603,7 +625,7 @@ void buildaudio_s (double pixeltime) {
         playtone(1500 , 1500) ;
 
         // red channel
-        for ( k=0 ; k<320 ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
 //       Serial.println("Ending row");    
@@ -814,7 +836,7 @@ void writefile_wav () {
     uint32_t i ;
     
     audiosize  = g_samples * CHANS * (BITS / 8) ; // bytes of audio
-    totalsize  = 4 + (8 + 16) + (8 + audiosize) ; // audio + some headers
+    totalsize  = 4 + (8 + 16) + (8 + audiosize) ; // audio + some headers  
     byterate   = g_rate * CHANS * BITS / 8 ;        // audio bytes / sec
     blockalign = CHANS * BITS / 8 ;               // total bytes / sample
     
@@ -942,17 +964,18 @@ void load_files() {
 }
 */
 
-void play_pwm_file() {
+void play_pwm_file(int dds_pwm_pin) {
 	
-  set_sys_clock_khz(133000, true);  	
-  #define DDS_PWM_PIN 26
-  int dds_pwm_pin = DDS_PWM_PIN;	
-  int clock = RATE; // 11.025E3; // was 22E3 50E3;
+//  set_sys_clock_khz(133000, true);
+	
+//  #define DDS_PWM_PIN 26
+//   = DDS_PWM_PIN;	
+//  int clock = RATE; // 11.025E3; // was 22E3 50E3;
   float multiplier;
-  int wrap = 5;  // was 10; // 5;
+  int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
-  int period = 1E6 / clock;
+  int period = 1E6 / g_rate;  // clock;
   char octet;
   byte lower;
   byte upper;
@@ -961,12 +984,13 @@ void play_pwm_file() {
 	 
     dds_pwm_pin = 26;
    
-    multiplier = 133E6 / (clock * wrap);
-//    multiplier = 125E6 / (clock * wrap);
+//    multiplier = 133E6 / (clock * (wrap + 1));
+    multiplier = 133E6 / (g_rate * (wrap + 1));
+//    multiplier = 125E6 / (clock * (wrap + 1));
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico DDS v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", clock, wrap, multiplier, period);
+    Serial.printf("Pico PWM Playback v0.1 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
@@ -975,20 +999,27 @@ void play_pwm_file() {
     pwm_config_set_clkdiv(&dds_pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
     pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
     pwm_init(dds_pin_slice, &dds_pwm_config, true);
-    pwm_set_gpio_level(dds_pwm_pin, (dds_pwm_config.top + 1) * 0.5);
+    pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
   
-    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
-	 
-
-  delay(1000);	 
+//    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
+	
+//  delay(1000);	 
 	
 // while (true) {	
 	
   output_file = LittleFS.open("/cam.pwm", "r");
 	
-	 
+  long prompt_count_max = 1E6 / period;
+  long prompt_count = 0;	
+	
   sstv_micro_timer = micros();		
-  while (output_file.available()) {	
+  while (output_file.available() && !sstv_stop) {	
+
+    prompt_count++;
+    if (prompt_count > prompt_count_max) {
+	prompt_count = 0;
+//	Serial.println("Prompt!\n");    // in future, add button prompt
+    }
 	  
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
@@ -996,11 +1027,11 @@ void play_pwm_file() {
 //    Serial.printf("%d\n%d\n", lower, upper);	
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	  
-    pwm_set_gpio_level(DDS_PWM_PIN, lower);
+    pwm_set_gpio_level(dds_pwm_pin, lower);
     sstv_micro_timer = micros();	
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	
-    pwm_set_gpio_level(DDS_PWM_PIN, upper);
+    pwm_set_gpio_level(dds_pwm_pin, upper);
     sstv_micro_timer = micros();
   }
 	
@@ -1140,7 +1171,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   
   if (outFile) {
 //    if (debug)
-      Serial.printf("Output opened %s", fileout);
+      Serial.printf("Output opened %s\n", fileout);
   }
   else
     Serial.println("Failed to open output");
@@ -1216,4 +1247,8 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   if (debug)
     Serial.println("Bin has been written to FS");
   outFile.close();
+}
+
+void sstv_end() {
+  sstv_stop = true;
 }
