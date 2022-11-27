@@ -313,7 +313,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     }
     deltatheta = g_twopioverrate * tonefreq ;
     
-    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)); i++ ) {
+    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10)); i++ ) {
 #ifdef AUDIO_AIFF        
         g_samples++ ;
         
@@ -534,10 +534,10 @@ void buildaudio_s (double pixeltime) {
 
 //    for ( y=0 ; y<256 ; y++ ) {
 //    for ( y=0 ; y<100 ; y++ ) {
-    for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)) ; y++ ) {
+    for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10)) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-        for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)) ; x++ ) {
+        for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10)) ; x++ ) {
 /*
 	if ( x < 100) {
 		r[x] = 0xff;
@@ -607,14 +607,14 @@ void buildaudio_s (double pixeltime) {
         playtone(1500, 1500);
         
         // add audio for green channel for this row
-        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10))  ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10))  ; k++ )
             playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 
         // separator tone 
         playtone(1500, 1500) ;
 
         // blue channel
-        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)) ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10)) ; k++ )
             playtone( toneval_rgb( b[k] ) , pixeltime ) ; 
      
 
@@ -625,7 +625,7 @@ void buildaudio_s (double pixeltime) {
         playtone(1500 , 1500) ;
 
         // red channel
-        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10))  ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10))  ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
 //       Serial.println("Ending row");    
