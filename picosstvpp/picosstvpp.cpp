@@ -39,7 +39,7 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
-  Serial.println("picosstvpp v0.1 starting");	
+  Serial.println("picosstvpp v0.2 starting");	
   show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
@@ -313,7 +313,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
     }
     deltatheta = g_twopioverrate * tonefreq ;
     
-    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL); i++ ) {
+    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)); i++ ) {
 #ifdef AUDIO_AIFF        
         g_samples++ ;
         
@@ -534,10 +534,10 @@ void buildaudio_s (double pixeltime) {
 
 //    for ( y=0 ; y<256 ; y++ ) {
 //    for ( y=0 ; y<100 ; y++ ) {
-    for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop && !Serial.available() && !BOOTSEL) ; y++ ) {
+    for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-        for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL) ; x++ ) {
+        for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)) ; x++ ) {
 /*
 	if ( x < 100) {
 		r[x] = 0xff;
@@ -607,14 +607,14 @@ void buildaudio_s (double pixeltime) {
         playtone(1500, 1500);
         
         // add audio for green channel for this row
-        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL)  ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10))  ; k++ )
             playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 
         // separator tone 
         playtone(1500, 1500) ;
 
         // blue channel
-        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL) ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10)) ; k++ )
             playtone( toneval_rgb( b[k] ) , pixeltime ) ; 
      
 
@@ -625,7 +625,7 @@ void buildaudio_s (double pixeltime) {
         playtone(1500 , 1500) ;
 
         // red channel
-        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL)  ; k++ )
+        for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && !digitalRead(10))  ; k++ )
             playtone( toneval_rgb( r[k] ) , pixeltime ) ;
 
 //       Serial.println("Ending row");    
@@ -1019,7 +1019,7 @@ void play_pwm_file(int dds_pwm_pin) {
     if (prompt_count > prompt_count_max) {
 	prompt_count = 0;
 //	Serial.println("Prompt!\n");    // in future, add button prompt
-	if (Serial.available() || BOOTSEL)
+	if (Serial.available() || BOOTSEL || !digitalRead(10))
 	  sstv_stop = true;  	 
     }
 	  
