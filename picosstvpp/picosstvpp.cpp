@@ -1013,12 +1013,14 @@ void play_pwm_file(int dds_pwm_pin) {
   long prompt_count = 0;	
 	
   sstv_micro_timer = micros();		
-  while (output_file.available() && !sstv_stop && !Serial.available()) {	
+  while (output_file.available() && !sstv_stop) {	
 
     prompt_count++;
     if (prompt_count > prompt_count_max) {
 	prompt_count = 0;
 //	Serial.println("Prompt!\n");    // in future, add button prompt
+	if (Serial.available())
+	  sstv_stop = true;  	 
     }
 	  
     output_file.readBytes(&octet, 1);
