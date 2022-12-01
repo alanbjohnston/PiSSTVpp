@@ -1018,7 +1018,8 @@ void play_pwm_file(int dds_pwm_pin) {
   long prompt_count = 0;	
 	
   sstv_micro_timer = micros();		
-  while (output_file.available() && !sstv_stop) {	
+//  while (output_file.available() && !sstv_stop) {	
+  while (!sstv_stop) {	  
 /*
     prompt_count++;
     if (prompt_count > prompt_count_max) {
