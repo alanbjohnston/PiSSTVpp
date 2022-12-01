@@ -196,7 +196,8 @@ void picosstvpp() {
             buildaudio_s(432.0);
             break;
         case 56: //Scottie 2
-            buildaudio_s(275.2);
+//            buildaudio_s(275.2);
+	     buildaudio_s(265.2);
             break;
         case 76: //Scottie DX
             buildaudio_s(1080.0);
