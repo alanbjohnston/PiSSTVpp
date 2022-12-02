@@ -528,7 +528,8 @@ void buildaudio_m (double pixeltime) {
 void buildaudio_s (double pixeltime) {
     uint16_t x , y , k ;
     uint32_t pixel ;
-    uint8_t r[320], g[320], b[320], buff_row[320*2] ;
+    uint8_t r[320], g[320], b[320]; 
+    char buff_row[320 * 2] ;
     
     Serial.printf( "Adding image to audio data.\n" ) ;
 	
