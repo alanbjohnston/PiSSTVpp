@@ -346,8 +346,10 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
 	for(int j = 0; j < 2; j++) {	
           g_samples++ ;
-        
-          if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }
+ 
+//          if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }		
+          if ( tonefreq == 0 ) 
+	      g_audio[j] = (WRAP + 1)/2; 
           else {
 
 //            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
