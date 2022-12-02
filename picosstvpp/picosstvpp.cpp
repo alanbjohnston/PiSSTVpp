@@ -1038,9 +1038,9 @@ void play_pwm_file(int dds_pwm_pin) {
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	  
     pwm_set_gpio_level(dds_pwm_pin, lower);
-    sstv_micro_timer = micros();	
+//    sstv_micro_timer = micros();	
 	  
-    while ((micros() - sstv_micro_timer) < period)	{ }   	
+    while ((micros() - sstv_micro_timer) < (2 * period))    { }   	
     pwm_set_gpio_level(dds_pwm_pin, upper);
     sstv_micro_timer = micros();
   }
