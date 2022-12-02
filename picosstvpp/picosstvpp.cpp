@@ -590,14 +590,14 @@ void buildaudio_s (double pixeltime) {
             r[x] = (float)(red_raw) * 255.0/31.0;
             g[x] = (float)(green_raw) * 255.0/63.0;
             b[x] = (float)(blue_raw) * 255.0/31.0;    	
-/*		
+/**/		
 	    Serial.print(r[x], HEX);
 	    Serial.print(" ");
 	    Serial.print(g[x], HEX);
 	    Serial.print(" ");
 	    Serial.print(b[x], HEX);
 	    Serial.print(" + ");	
-*/		
+/**/		
 /**/          
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
@@ -1038,9 +1038,9 @@ void play_pwm_file(int dds_pwm_pin) {
 	  
     while ((micros() - sstv_micro_timer) < period)	{ }   	  
     pwm_set_gpio_level(dds_pwm_pin, lower);
-//    sstv_micro_timer = micros();	
+    sstv_micro_timer = micros();	
 	  
-    while ((micros() - sstv_micro_timer) < (2 * period))    { }   	
+    while ((micros() - sstv_micro_timer) < period)    { }   	
     pwm_set_gpio_level(dds_pwm_pin, upper);
     sstv_micro_timer = micros();
   }
