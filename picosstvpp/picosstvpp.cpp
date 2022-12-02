@@ -528,7 +528,7 @@ void buildaudio_m (double pixeltime) {
 void buildaudio_s (double pixeltime) {
     uint16_t x , y , k ;
     uint32_t pixel ;
-    uint8_t r[320], g[320], b[320] ;
+    uint8_t r[320], g[320], b[320], buff_row[320*2] ;
     
     Serial.printf( "Adding image to audio data.\n" ) ;
 	
@@ -544,6 +544,7 @@ void buildaudio_s (double pixeltime) {
     for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
+//	input_file.readBytes(buff, 2);    
         for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
 /*
 	if ( x < 100) {
@@ -590,14 +591,14 @@ void buildaudio_s (double pixeltime) {
             r[x] = (float)(red_raw) * 255.0/31.0;
             g[x] = (float)(green_raw) * 255.0/63.0;
             b[x] = (float)(blue_raw) * 255.0/31.0;    	
-/**/		
+/*		
 	    Serial.print(r[x], HEX);
 	    Serial.print(" ");
 	    Serial.print(g[x], HEX);
 	    Serial.print(" ");
 	    Serial.print(b[x], HEX);
 	    Serial.print(" + ");	
-/**/		
+*/		
 /**/          
 //          r[x] =  buff[0];
 //          g[x] =  buff[1];
