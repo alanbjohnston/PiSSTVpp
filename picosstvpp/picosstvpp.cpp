@@ -1023,17 +1023,9 @@ void play_pwm_file(int dds_pwm_pin) {
   long prompt_count = 0;	
 	
   sstv_micro_timer = micros();		
-//  while (output_file.available() && !sstv_stop) {	
-  while (!sstv_stop) {	  
-/*
-    prompt_count++;
-    if (prompt_count > prompt_count_max) {
-	prompt_count = 0;
-//	Serial.println("Prompt!\n");   
-	if (Serial.available() || BOOTSEL || !digitalRead(10))
-	  sstv_stop = true;  	 
-    }
-*/	  
+  while (output_file.available() && !sstv_stop) {	
+//  while (!sstv_stop) {	  
+	  
     output_file.readBytes(&octet, 1);
     lower = octet & 0x0f;
     upper = (octet & 0xf0) >> 4;
@@ -1046,6 +1038,15 @@ void play_pwm_file(int dds_pwm_pin) {
     while ((micros() - sstv_micro_timer) < period)    { }   	
     pwm_set_gpio_level(dds_pwm_pin, upper);
     sstv_micro_timer = micros();
+	  
+    prompt_count++;
+    if (prompt_count > prompt_count_max) {
+	prompt_count = 0;
+//	Serial.println("Prompt!\n");   
+	if (Serial.available() || BOOTSEL || !digitalRead(10))
+	  sstv_stop = true;  	 
+    }
+	  
   }
 	
   Serial.println("End");
