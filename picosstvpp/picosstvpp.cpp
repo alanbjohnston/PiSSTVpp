@@ -39,16 +39,16 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
-  Serial.println("picosstvpp v0.2 starting");	
-  show_dir4();	
+  Serial.println("picosstvpp v0.3 starting");	
+//  show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
 //  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
-  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
-  LittleFS.remove("/cam2.bin");
+//  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+//  LittleFS.remove("/cam2.bin");
   LittleFS.remove("/cam.bin");
 	
-  Serial.println("Deleted some files");	
+  Serial.println("Deleted .bin and .pwm files");	
   show_dir4();
 
 }
@@ -129,9 +129,11 @@ void picosstvpp() {
     Serial.printf( "Constants check:\n" ) ;
     Serial.printf( "      rate = %d\n" , g_rate ) ;
     Serial.printf( "  VIS code = %d\n" , g_protocol);
+#ifndef SSTV_PWM		
     Serial.printf( "      BITS = %d\n" , BITS ) ;
     Serial.printf( "    VOLPCT = %d\n" , VOLPCT ) ; 
     Serial.printf( "     scale = %d\n" , g_scale ) ;
+#endif	
     Serial.printf( "   us/samp = %f\n" , g_uspersample ) ;
     Serial.printf( "   2p/rate = %f\n\n" , g_twopioverrate ) ;
 /*    
@@ -178,7 +180,10 @@ void picosstvpp() {
 #ifdef SSTV_PWM	
     output_file = LittleFS.open("/cam.pwm", "w+");	
 #endif	
-    Serial.printf( "Image ptr opened.\n" ) ;
+    if (!output_file)
+      Serial.printf( "Output file opened.\n" );
+    else
+      Serial.printf( "Error opening output file.\n" );	    
 
     // go!
 
@@ -232,9 +237,9 @@ void picosstvpp() {
     // brag
     
     uint32_t endtime = millis();	// time(NULL) ;
-    Serial.printf( "Created soundfile in %d milliseconds.\n" , ( endtime - starttime ) ) ;
+    Serial.printf( "Created output file in %d milliseconds.\n" , ( endtime - starttime ) ) ;
 	
-    show_dir4();
+//    show_dir4();
 //    delay(1000);	
 //    play_pwm_file();
 //    delay(10000);	
@@ -365,7 +370,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	int result = output_file.write(octet);
 	if (result < 1) {
 	  sstv_stop_write = true;
-	  Serial.println("File write error");	
+	  Serial.println("Output file write error");	
 	}
 	i++;   	    
 #endif  		
@@ -456,7 +461,7 @@ void addvisheader() {
 
     // VIS stop
     playtone( 1200 ,  30000 ) ; 
-    Serial.printf( "Done adding VIS header to audio data.\n" ) ;
+    Serial.printf( "Done adding VIS header to output file.\n" ) ;
         
 } // end addvisheader   
 
@@ -531,7 +536,7 @@ void buildaudio_s (double pixeltime) {
     uint8_t r[320], g[320], b[320]; 
     char buff_row[320 * 2] ;
     
-    Serial.printf( "Adding image to audio data.\n" ) ;
+    Serial.printf( "Adding image to output file.\n" ) ;
 	
 //    char buff[3];
     char buff[2];
