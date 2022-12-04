@@ -24,7 +24,7 @@ void     playtone       (uint16_t tonefreq , double tonedur) ;
 void     addvisheader   (void) ;
 void     addvistrailer  (void) ;
 
-uint16_t toneval_rgb        (uint8_t colorval) ;
+//uint16_t toneval_rgb        (uint8_t colorval) ;
 uint16_t toneval_yuv        (uint8_t colorval) ;
 
 void     buildaudio_m     (double pixeltime) ;
