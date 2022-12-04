@@ -43,8 +43,8 @@ void picosstvpp_begin(int pin) {
 //  show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
-//  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
-//  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
+  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
 //  LittleFS.remove("/cam2.bin");
   LittleFS.remove("/cam.bin");
 	
@@ -180,7 +180,7 @@ void picosstvpp() {
 #ifdef SSTV_PWM	
     output_file = LittleFS.open("/cam.pwm", "w+");	
 #endif	
-    if (!output_file)
+    if (output_file)
       Serial.printf( "Output file opened.\n" );
     else
       Serial.printf( "Error opening output file.\n" );	    
@@ -316,10 +316,12 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
+/*	
     if (tonesamples > MAXSAMPLES) {
 	Serial.printf("Tonesamples overflow: %d \n", tonesamples); 
 	tonesamples = MAXSAMPLES - 1;    
     }
+*/	
     deltatheta = g_twopioverrate * tonefreq ;
     
 //    for ( i=1 ; (i<=tonesamples && !sstv_stop_write && !sstv_stop && !Serial.available() && !BOOTSEL && digitalRead(10)); i++ ) {
@@ -1005,7 +1007,7 @@ void play_pwm_file(int dds_pwm_pin) {
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico PWM Playback v0.2 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
+    Serial.printf("Pico PWM Playback v0.3 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
