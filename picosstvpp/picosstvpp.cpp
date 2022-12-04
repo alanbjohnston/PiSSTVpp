@@ -390,9 +390,12 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 */	
 }  // end playtone    
 
+/*
 uint16_t toneval_rgb ( uint8_t colorval ) {
     return ( ( 800 * colorval ) / 256 ) + 1500 ;
 }
+*/
+#define toneval_rgb (colorval) ((( 800 * colorval) / 256) + 1500) 
 
 uint16_t toneval_yuv ( uint8_t colorval ) {
     return ( (float)colorval * 3.1372549 ) + 1500.0 ;
