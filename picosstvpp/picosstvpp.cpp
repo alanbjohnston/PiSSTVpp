@@ -393,7 +393,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	}
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);  
 #ifdef ESP32
-	Serial.write(byte_octet);
+	Serial.write(octet);
 #else	    
 	int result = output_file.write(octet);
 	if (result < 1) {
