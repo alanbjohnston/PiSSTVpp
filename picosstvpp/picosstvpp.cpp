@@ -1263,7 +1263,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   // Open the file for writing
 //  File imgFile = SD.open(fileout, FILE_WRITE);
 #ifdef ESP32	
-    outFile = SPIFFS.open("fileout, FILE_WRITE);	
+    outFile = SPIFFS.open(fileout, FILE_WRITE);	
 #else	
   outFile = LittleFS.open(fileout, "w+");
 #endif
