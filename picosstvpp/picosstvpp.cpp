@@ -29,7 +29,7 @@ uint16_t   g_rate;
  File input_file;
  File output_file;
 // File inFile;
-  File outFile;
+  File outFile2;
   byte sstv_pwm_pin;
   bool sstv_stop = false;
   bool sstv_stop_write = false;
@@ -1236,7 +1236,7 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
               //              for(k = 0; k < 15360; k++){
 //                imgFile.write(sortBuf[k]);
 //              }
-              outFile.write(JpegDec_sortBuf, sizeof(JpegDec_sortBuf));
+              outFile2.write(JpegDec_sortBuf, sizeof(JpegDec_sortBuf));
               JpegDec_i = 0;
               JpegDec_j++; //15(sections)
             }
@@ -1263,12 +1263,12 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   // Open the file for writing
 //  File imgFile = SD.open(fileout, FILE_WRITE);
 #ifdef ESP32	
-    outFile = SPIFFS.open(fileout, FILE_WRITE);	
+    outFile2 = SPIFFS.open(fileout, FILE_WRITE);	
 #else	
-  outFile = LittleFS.open(fileout, "w+");
+  outFile2 = LittleFS.open(fileout, "w+");
 #endif
   
-  if (outFile) {
+  if (outFile2) {
 //    if (debug)
       Serial.printf("Output opened %s\n", fileout);
   }
@@ -1347,7 +1347,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
 
   if (debug)
     Serial.println("Bin has been written to FS");
-  outFile.close();
+  outFile2.close();
 }
 
 void sstv_end() {
