@@ -14,7 +14,12 @@
 //#include <tgmath.h>
 //#include <magic.h>
 //#include <unistd.h>
+
+#ifdef ESP32
+#else
 #include "LittleFS.h"
+#endif
+
 #include "hardware/pwm.h" 
 #include <TJpg_Decoder.h>
 #include "pico/stdlib.h"   // stdlib 
