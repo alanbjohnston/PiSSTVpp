@@ -16,13 +16,14 @@
 //#include <unistd.h>
 
 #ifdef ESP32
+#include <driver/ledc.h>    
 #else
+#include "pico/stdlib.h"   // stdlib 
 #include "LittleFS.h"
+#include "hardware/pwm.h" 
 #endif
 
-#include "hardware/pwm.h" 
 #include <TJpg_Decoder.h>
-#include "pico/stdlib.h"   // stdlib 
 
 //uint8_t  filetype       (char *filename) ;
 void     playtone       (uint16_t tonefreq , double tonedur) ;
