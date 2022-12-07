@@ -1289,7 +1289,8 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   
   uint16_t w = 0, h = 0;
   // TJpgDec.getFsJpgSize(&w, &h, "/cam.jpg", LittleFS); // Note name preceded with "/"
-  TJpgDec.getFsJpgSize(&w, &h, filename, LittleFS); // Note name preceded with "/"
+///  TJpgDec.getFsJpgSize(&w, &h, filename, LittleFS); // Note name preceded with "/"
+  TJpgDec.getFsJpgSize(&w, &h, filename, SPIFFS); // Note name preceded with "/"
   
   if (debug) {
     Serial.print("Width = "); 
