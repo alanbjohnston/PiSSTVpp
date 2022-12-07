@@ -44,8 +44,14 @@ void     writefile_aiff (void) ;
 void     writefile_wav  (void) ;
 #endif
 
+#ifdef ESP32
+void deleteFile4(fs::FS &fs, const char * path);
+void listDir4(fs::FS &fs, const char * dirname, uint8_t levels);
+#else
 void show_dir4();
 //void load_files();
+#endif
+
 void play_pwm_file(int dds_pwm_pin) ;
 
 void picosstvpp_begin(int pin);
