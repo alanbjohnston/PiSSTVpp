@@ -42,15 +42,27 @@ void picosstvpp_begin(int pin) {
   Serial.println("picosstvpp v0.3 starting");	
 //  show_dir4();	
 //  load_files();
+	
+#ifdef ESP32	
+   deleteFile4(SPIFFS,"/cam.pwm");
+   deleteFile4(SPIFFS,"/sstv_image_1_320_x_240.jpg");
+   deleteFile4(SPIFFS,"/sstv_image_2_320_x_240.jpg");
+   deleteFile4(SPIFFS,"/cam.bin");	   
+#else	   
   LittleFS.remove("/cam.pwm");
   LittleFS.remove("/sstv_image_1_320_x_240.jpg");
   LittleFS.remove("/sstv_image_2_320_x_240.jpg");
 //  LittleFS.remove("/cam2.bin");
   LittleFS.remove("/cam.bin");
-	
-  Serial.println("Deleted .bin and .pwm files");	
+#endif
+	   
+  Serial.println("Deleted .bin and .pwm files");
+#ifdef ESP32	
+  listDir(SPIFFS, "/", 0);	
+#else	
   show_dir4();
-
+#endif
+	
 }
 
 // ================
@@ -932,6 +944,48 @@ void writefile_wav () {
         
 // end
 
+
+#ifdef EDP32
+void listDir4(fs::FS &fs, const char * dirname, uint8_t levels) {
+  Serial.printf("Listing directory: %s\r\n", dirname);
+
+  File root = fs.open(dirname);
+  if (!root) {
+    Serial.println("- failed to open directory");
+    return;
+  }
+  if (!root.isDirectory()) {
+    Serial.println(" - not a directory");
+    return;
+  }
+
+  File file = root.openNextFile();
+  while (file) {
+    if (file.isDirectory()) {
+      Serial.print("  DIR : ");
+      Serial.println(file.name());
+      if (levels) {
+        listDir(fs, file.name(), levels - 1);
+      }
+    } else {
+      Serial.print("  FILE: ");
+      Serial.print(file.name());
+      Serial.print("\tSIZE: ");
+      Serial.println(file.size());
+    }
+    file = root.openNextFile();
+  }
+}
+
+void deleteFile4(fs::FS &fs, const char * path) {
+  Serial.printf("Deleting file: %s\r\n", path);
+  if (fs.remove(path)) {
+    Serial.println("- file deleted");
+  } else {
+    Serial.println("- delete failed");
+  }
+}
+#else
 void show_dir4() {
   LittleFS.begin();
   Dir dir = LittleFS.openDir("/");
@@ -983,6 +1037,7 @@ void load_files() {
   show_dir();
 }
 */
+#endif
 
 void play_pwm_file(int dds_pwm_pin) {
 	
