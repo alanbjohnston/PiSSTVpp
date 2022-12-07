@@ -391,12 +391,14 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
           }
 	}
-	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
+	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);  
+#ifndef ESP32	    
 	int result = output_file.write(octet);
 	if (result < 1) {
 	  sstv_stop_write = true;
 	  Serial.println("Output file write error");	
 	}
+#endif	    
 	i++;   	    
 #endif  		
 
