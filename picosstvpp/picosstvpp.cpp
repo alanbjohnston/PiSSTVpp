@@ -58,7 +58,7 @@ void picosstvpp_begin(int pin) {
 	   
   Serial.println("Deleted .bin and .pwm files");
 #ifdef ESP32	
-  listDir(SPIFFS, "/", 0);	
+  listDir4(SPIFFS, "/", 0);	
 #else	
   show_dir4();
 #endif
@@ -185,7 +185,12 @@ void picosstvpp() {
         return 3 ;
     }    
 */    
+#ifdef ESP32
+    input_file = SPIFFS.open("/cam.bin", FILE_READ);	
+#else
     input_file = LittleFS.open("/cam.bin", "r");
+#endif	
+	
 #ifdef WAV	
     output_file = LittleFS.open("/cam.wav", "w+");	
 #endif	
