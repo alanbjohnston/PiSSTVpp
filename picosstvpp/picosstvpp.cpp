@@ -195,7 +195,13 @@ void picosstvpp() {
     output_file = LittleFS.open("/cam.wav", "w+");	
 #endif	
 #ifdef SSTV_PWM	
+	
+#ifdef ESP32
+    output_file = SPIFFS.open("/cam.pwm", FILE_WRITE);	
+#else	
     output_file = LittleFS.open("/cam.pwm", "w+");	
+#endif
+	
 #endif	
     if (output_file)
       Serial.printf( "Output file opened.\n" );
@@ -328,8 +334,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //    tonefreq += 20;  // increase frequency by 20 Hz
 //    tonefreq *= 1.01333;  // increase frequency by scale.
 
-   if (Serial.available() || BOOTSEL || !digitalRead(10))  // check for button press of serial input
-     sstv_stop = true;
+//   if (Serial.available() || BOOTSEL || !digitalRead(10))  // check for button press of serial input
+//     sstv_stop = true;
 	
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
@@ -950,7 +956,7 @@ void writefile_wav () {
 // end
 
 
-#ifdef EDP32
+#ifdef ESP32
 void listDir4(fs::FS &fs, const char * dirname, uint8_t levels) {
   Serial.printf("Listing directory: %s\r\n", dirname);
 
