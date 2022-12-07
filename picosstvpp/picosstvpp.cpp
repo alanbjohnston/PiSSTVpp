@@ -1262,7 +1262,11 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   
   // Open the file for writing
 //  File imgFile = SD.open(fileout, FILE_WRITE);
+#ifdef ESP32	
+    outFile = SPIFFS.open("fileout, FILE_WRITE);	
+#else	
   outFile = LittleFS.open(fileout, "w+");
+#endif
   
   if (outFile) {
 //    if (debug)
@@ -1305,7 +1309,8 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   TJpgDec.setSwapBytes(false);    // was true
   TJpgDec.setCallback(get_block);  
   //TJpgDec.drawFsJpg(0, 0, "/cam.jpg", LittleFS);
-  TJpgDec.drawFsJpg(0, 0, filename, LittleFS);
+//  TJpgDec.drawFsJpg(0, 0, filename, LittleFS);
+  TJpgDec.drawFsJpg(0, 0, filename, SPIFFS);
   
   if (debug)
     Serial.println("Draw complete");
