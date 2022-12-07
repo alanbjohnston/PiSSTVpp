@@ -976,7 +976,7 @@ void listDir4(fs::FS &fs, const char * dirname, uint8_t levels) {
       Serial.print("  DIR : ");
       Serial.println(file.name());
       if (levels) {
-        listDir(fs, file.name(), levels - 1);
+        listDir4(fs, file.name(), levels - 1);
       }
     } else {
       Serial.print("  FILE: ");
@@ -1051,7 +1051,11 @@ void load_files() {
 #endif
 
 void play_pwm_file(int dds_pwm_pin) {
+
 	
+#ifdef ESP32
+  Serial.println("Playing PWM file");		
+#else
 //  set_sys_clock_khz(133000, true);
 	
 //  #define DDS_PWM_PIN 26
@@ -1127,7 +1131,8 @@ void play_pwm_file(int dds_pwm_pin) {
 	
   Serial.println("End");
   output_file.close();	
-
+#endif
+	
 //  delay(5000);	 	 
 // }	 
 }
