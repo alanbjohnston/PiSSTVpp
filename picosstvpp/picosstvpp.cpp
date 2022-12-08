@@ -39,7 +39,7 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
-  Serial.println("picosstvpp v0.3 starting");	
+  Serial.println("picosstvpp v0.4 starting");	
 //  show_dir4();	
 //  load_files();
 	
@@ -137,7 +137,7 @@ void picosstvpp() {
     g_theta = 0.0 ;
     g_samples = 0.0 ;
     g_fudge = 0.0 ;
-
+/*
     Serial.printf( "Constants check:\n" ) ;
     Serial.printf( "      rate = %d\n" , g_rate ) ;
     Serial.printf( "  VIS code = %d\n" , g_protocol);
@@ -148,6 +148,7 @@ void picosstvpp() {
 #endif	
     Serial.printf( "   us/samp = %f\n" , g_uspersample ) ;
     Serial.printf( "   2p/rate = %f\n\n" , g_twopioverrate ) ;
+*/	
 /*    
     // set filenames    
     strncpy( inputfile , argv[optind] , strlen( argv[optind] ) ) ;
@@ -204,7 +205,7 @@ void picosstvpp() {
 	
 #endif	
     if (output_file)
-      Serial.printf( "Output file opened.\n" );
+; //      Serial.printf( "Output file opened.\n" );
     else
       Serial.printf( "Error opening output file.\n" );	    
 
@@ -260,7 +261,7 @@ void picosstvpp() {
     // brag
     
     uint32_t endtime = millis();	// time(NULL) ;
-    Serial.printf( "Created output file in %d milliseconds.\n" , ( endtime - starttime ) ) ;
+    Serial.printf( "\nCreated output file in %d milliseconds.\n" , ( endtime - starttime ) ) ;
 	
 //    show_dir4();
 //    delay(1000);	
@@ -433,7 +434,7 @@ uint16_t toneval_yuv ( uint8_t colorval ) {
 //                 this just means lots of calls to playtone(). 
 
 void addvisheader() {
-    printf( "Adding VIS header to audio data.\n" ) ;
+//    printf( "Adding VIS header to audio data.\n" ) ;
     
     // bit of silence
 
@@ -493,7 +494,7 @@ void addvisheader() {
 
     // VIS stop
     playtone( 1200 ,  30000 ) ; 
-    Serial.printf( "Done adding VIS header to output file.\n" ) ;
+//    Serial.printf( "Done adding VIS header to output file.\n" ) ;
         
 } // end addvisheader   
 
@@ -555,7 +556,7 @@ void buildaudio_m (double pixeltime) {
         
     }  // end for y
     
-    printf( "Done adding image to audio data.\n" ) ;    
+//    printf( "Done adding image to audio data.\n" ) ;    
     
 }  // end buildaudio_m   
 
@@ -568,7 +569,7 @@ void buildaudio_s (double pixeltime) {
     uint8_t r[320], g[320], b[320]; 
     char buff_row[320 * 2] ;
     
-    Serial.printf( "Adding image to output file.\n" ) ;
+//    Serial.printf( "Adding image to output file.\n" ) ;
 	
 //    char buff[3];
     char buff[2];
@@ -678,7 +679,7 @@ void buildaudio_s (double pixeltime) {
 //       Serial.println("Ending row");    
     }  // end for y
     
-    Serial.printf( "Done adding image to audio data.\n" ) ;    
+//    Serial.printf( "Done adding image to audio data.\n" ) ;    
     
 }  // end buildaudio_s
 
