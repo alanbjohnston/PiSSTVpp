@@ -82,6 +82,11 @@ void picosstvpp() {
     sstv_stop_write = false;
     g_rate = WRAP * 4400; //RATE;
     g_protocol = 56; //Scottie 2
+	
+  Serial.println("picosstvpp v0.4 running");		
+#ifdef TEST_PATTERN
+	 Serial.println("Test pattern activated");
+#endif
 /*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
         switch (option) {
