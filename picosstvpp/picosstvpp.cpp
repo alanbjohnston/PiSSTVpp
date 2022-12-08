@@ -7,6 +7,7 @@
 // Ported to Raspberry Pi Pico and turned into a library by Alan Johnston, KU2Y
 
 #include "picosstvpp.h"
+#define TEST_PATTERN
 
 // =========
 // globals
@@ -585,7 +586,7 @@ void buildaudio_s (double pixeltime) {
 //	Serial.println("Starting row");    
 	input_file.readBytes(buff_row, sizeof(buff_row));    
         for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
-/*
+#ifdef TEST_PATTERN
 	if ( x < 100) {
 		r[x] = 0xff;
 		g[x] = 0;		
@@ -601,7 +602,7 @@ void buildaudio_s (double pixeltime) {
 		g[x] = 0;		
 		b[x] = 0xff;	
 	}
-*/		
+#endif		
 		/**/
 //	    input_file.readBytes(buff, 3);
 ///	    input_file.readBytes(buff, 2);
@@ -628,9 +629,11 @@ void buildaudio_s (double pixeltime) {
 	    Serial.print(blue_raw, HEX);
 	    Serial.print(" / ");			
 */		
-            r[x] = (float)(red_raw) * 255.0/31.0;
+#ifndef TEST_PATTERN
+	    r[x] = (float)(red_raw) * 255.0/31.0;
             g[x] = (float)(green_raw) * 255.0/63.0;
             b[x] = (float)(blue_raw) * 255.0/31.0;    	
+#endif		
 /*		
 	    Serial.print(r[x], HEX);
 	    Serial.print(" ");
