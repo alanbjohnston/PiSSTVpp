@@ -587,6 +587,7 @@ void buildaudio_s (double pixeltime) {
 	input_file.readBytes(buff_row, sizeof(buff_row));    
         for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
 #ifdef TEST_PATTERN
+/*		
 	if ( x < 100) {
 		r[x] = 0xff;
 		g[x] = 0;		
@@ -602,6 +603,10 @@ void buildaudio_s (double pixeltime) {
 		g[x] = 0;		
 		b[x] = 0xff;	
 	}
+*/	
+		r[x] = 0xff;
+		g[x] = 0xff;		
+		b[x] = 0xff;		
 #endif		
 		/**/
 //	    input_file.readBytes(buff, 3);
