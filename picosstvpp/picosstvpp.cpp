@@ -261,7 +261,7 @@ void picosstvpp() {
     // brag
     
     uint32_t endtime = millis();	// time(NULL) ;
-    Serial.printf( "\nCreated output file in %d milliseconds.\n" , ( endtime - starttime ) ) ;
+//    Serial.printf( "\nCreated output file in %d milliseconds.\n" , ( endtime - starttime ) ) ;
 	
 //    show_dir4();
 //    delay(1000);	
@@ -784,7 +784,7 @@ void buildaudio_r36 () {
 //                  More calls to playtone(). 
 
 void addvistrailer () {
-    printf( "Adding VIS trailer to audio data.\n" ) ;
+//    printf( "Adding VIS trailer to audio data.\n" ) ;
     
     playtone( 2300 , 300000 ) ;
     playtone( 1200 ,  10000 ) ;
@@ -794,7 +794,7 @@ void addvistrailer () {
     // bit of silence
     playtone(    0 , 500000 ) ;
     
-    printf( "Done adding VIS trailer to audio data.\n" ) ;    
+//    printf( "Done adding VIS trailer to audio data.\n" ) ;    
 }
 
 // writefile_aiff -- Save audio data to an AIFF file. Playback for
