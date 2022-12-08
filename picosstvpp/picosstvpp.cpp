@@ -34,6 +34,7 @@ uint16_t   g_rate;
   byte sstv_pwm_pin;
   bool sstv_stop = false;
   bool sstv_stop_write = false;
+    long sstv_count = 0;
 
 void picosstvpp_begin(int pin) {
 	
@@ -75,7 +76,7 @@ void picosstvpp_begin(int pin) {
 // ================
 
 // int main(int argc, char *argv[]) {
-void picosstvpp() {
+long picosstvpp() {	
     char *protocol; 
     int option;
     sstv_stop = false;
@@ -274,6 +275,7 @@ void picosstvpp() {
 //    play_pwm_file();
 //    delay(10000);	
 //    return 0 ;
+	return(sstv_count);
 }
 
 
@@ -401,6 +403,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);  
 #ifdef ESP32
 	Serial.write(octet);
+	sstv_count++;    
 #else	    
 	int result = output_file.write(octet);
 	if (result < 1) {
