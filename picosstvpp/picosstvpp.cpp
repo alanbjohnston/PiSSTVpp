@@ -43,8 +43,11 @@ void picosstvpp_begin(int pin) {
   Serial.println("picosstvpp v0.4 starting");	
 //  show_dir4();	
 //  load_files();
- if (TEST_PATTERN)
+	
+#ifdef TEST_PATTERN
 	 Serial.println("Test pattern activated");
+#endif
+	
 #ifdef ESP32	
    deleteFile4(SPIFFS,"/cam.pwm");
    deleteFile4(SPIFFS,"/sstv_image_1_320_x_240.jpg");
