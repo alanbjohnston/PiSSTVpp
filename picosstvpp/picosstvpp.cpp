@@ -5,7 +5,7 @@
 // 2014 Don Gi Min, KM4EQR, more protocols and option handling
 
 // Ported to Raspberry Pi Pico and turned into a library by Alan Johnston, KU2Y
-	     Serial.println(micros() - sstv_micro_timer);
+
 #include "picosstvpp.h"
 
 // =========
@@ -36,6 +36,7 @@ uint16_t   g_rate;
 
 void picosstvpp_begin(int pin) {
 	
+//	     Serial.println(micros() - sstv_micro_timer);	
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
@@ -73,7 +74,7 @@ void picosstvpp() {
   Serial.println("Playing PWM file");	
   unsigned long sstv_micro_timer;
 	 
-    dds_pwm_pin = 26;
+  int  dds_pwm_pin = 26;
    
 //    multiplier = 133E6 / (clock * (wrap + 1));
     multiplier = 133E6 / (g_rate * (wrap + 1));
@@ -403,7 +404,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
  
 //          if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }		
           if ( tonefreq == 0 ) 
-	      g_audio[j] = (WRAP + 1)/2; 
+//	      g_audio[j] = (WRAP + 1)/2; 
+	      voltage = (WRAP + 1)/2; 
           else {
 
 //            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
