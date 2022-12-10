@@ -33,6 +33,7 @@ uint16_t   g_rate;
   byte sstv_pwm_pin;
   bool sstv_stop = false;
   bool sstv_stop_write = false;
+  unsigned long sstv_micro_timer;
 
 void picosstvpp_begin(int pin) {
 	
@@ -72,7 +73,7 @@ void picosstvpp() {
   byte lower;
   byte upper;
   Serial.println("Playing PWM file");	
-  unsigned long sstv_micro_timer;
+
 	 
   int  dds_pwm_pin = 26;
    
@@ -418,7 +419,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           }
 // play it	
 	 while ((micros() - sstv_micro_timer) < period)    { }   	
-    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
+//    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
+    	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
     	 sstv_micro_timer = micros();
 	  
 	    prompt_count++;
