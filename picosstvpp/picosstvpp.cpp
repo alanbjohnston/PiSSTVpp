@@ -34,6 +34,7 @@ uint16_t   g_rate;
   bool sstv_stop = false;
   bool sstv_stop_write = false;
   unsigned long sstv_micro_timer;
+  int sstv_period;
 
 void picosstvpp_begin(int pin) {
 	
@@ -68,7 +69,7 @@ void picosstvpp() {
   int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
-  int period = 1E6 / g_rate;  // clock;
+  sstv_period = 1E6 / g_rate;  // clock;
   char octet;
   byte lower;
   byte upper;
@@ -83,7 +84,7 @@ void picosstvpp() {
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico PWM Playback v0.4 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
+    Serial.printf("Pico PWM Playback v0.4 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, sstv_period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
@@ -102,7 +103,7 @@ void picosstvpp() {
 	
 //  output_file = LittleFS.open("/cam.pwm", "r");
 	
-  long prompt_count_max = 1E6 / period;
+  long prompt_count_max = 1E6 / sstv_period;
   long prompt_count = 0;	
 	
   sstv_micro_timer = micros();	
@@ -418,7 +419,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
           }
 // play it	
-	 while ((micros() - sstv_micro_timer) < period)    { }   	
+	 while ((micros() - sstv_micro_timer) < sstv_period)    { }   	
 //    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
     	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
     	 sstv_micro_timer = micros();
