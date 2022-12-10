@@ -5,7 +5,7 @@
 // 2014 Don Gi Min, KM4EQR, more protocols and option handling
 
 // Ported to Raspberry Pi Pico and turned into a library by Alan Johnston, KU2Y
-
+	     Serial.println(micros() - sstv_micro_timer);
 #include "picosstvpp.h"
 
 // =========
@@ -39,7 +39,7 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
-  Serial.println("picosstvpp v0.3 starting");	
+  Serial.println("picosstvpp v0.4 starting");	
 //  show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
@@ -50,6 +50,7 @@ void picosstvpp_begin(int pin) {
 	
   Serial.println("Deleted .bin and .pwm files");	
   show_dir4();
+		
 
 }
 
@@ -59,11 +60,56 @@ void picosstvpp_begin(int pin) {
 
 // int main(int argc, char *argv[]) {
 void picosstvpp() {
+	
+    g_rate = WRAP * 4400; //RATE;	
+  float multiplier;
+  int wrap = WRAP;  // was 10; // 5;
+  int dds_pin_slice;
+  pwm_config dds_pwm_config;
+  int period = 1E6 / g_rate;  // clock;
+  char octet;
+  byte lower;
+  byte upper;
+  Serial.println("Playing PWM file");	
+  unsigned long sstv_micro_timer;
+	 
+    dds_pwm_pin = 26;
+   
+//    multiplier = 133E6 / (clock * (wrap + 1));
+    multiplier = 133E6 / (g_rate * (wrap + 1));
+//    multiplier = 125E6 / (clock * (wrap + 1));
+	
+//    isr_period = (int) ( 1E6 / clock + 0.5);
+    
+    Serial.printf("Pico PWM Playback v0.4 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
+
+    gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
+    dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
+
+    dds_pwm_config = pwm_get_default_config();
+    pwm_config_set_clkdiv(&dds_pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
+    pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
+    pwm_init(dds_pin_slice, &dds_pwm_config, true);
+    pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
+  
+//    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
+	
+//  delay(1000);	 
+	
+// while (true) {	
+	
+//  output_file = LittleFS.open("/cam.pwm", "r");
+	
+  long prompt_count_max = 1E6 / period;
+  long prompt_count = 0;	
+	
+  sstv_micro_timer = micros();	
+	
     char *protocol; 
     int option;
     sstv_stop = false;
     sstv_stop_write = false;
-    g_rate = WRAP * 4400; //RATE;
+
     g_protocol = 56; //Scottie 2
 /*	
     while ((option = getopt(argc, argv, "r:p:")) != -1) {
@@ -178,13 +224,14 @@ void picosstvpp() {
     output_file = LittleFS.open("/cam.wav", "w+");	
 #endif	
 #ifdef SSTV_PWM	
-    output_file = LittleFS.open("/cam.pwm", "w+");	
+//    output_file = LittleFS.open("/cam.pwm", "w+");	
 #endif	
+/*	
     if (output_file)
       Serial.printf( "Output file opened.\n" );
     else
       Serial.printf( "Error opening output file.\n" );	    
-
+*/
     // go!
 
     addvisheader() ;
@@ -351,7 +398,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
         }
 #endif    
 #ifdef SSTV_PWM
-	for(int j = 0; j < 2; j++) {	
+//	for(int j = 0; j < 2; j++) {	
           g_samples++ ;
  
 //          if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }		
@@ -363,17 +410,32 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 0)) ; //   range is 1 to wrap - 1
             voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; // was + 1  range is -1 to wrap + 1
 //	    Serial.println(voltage);	
-	    g_audio[j] = voltage ;
+//	    g_audio[j] = voltage ;
             g_theta += deltatheta ;	
 
           }
-	}
+// play it	
+	 while ((micros() - sstv_micro_timer) < period)    { }   	
+    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
+    	 sstv_micro_timer = micros();
+	  
+	    prompt_count++;
+	    if (prompt_count > prompt_count_max) {
+		prompt_count = 0;
+	//	Serial.println("Prompt!\n");   
+		if (Serial.available() || BOOTSEL || !digitalRead(10))
+		  sstv_stop = true;  	 
+	    }
+	    
+//	}
+/*	    
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
 	int result = output_file.write(octet);
 	if (result < 1) {
 	  sstv_stop_write = true;
 	  Serial.println("Output file write error");	
 	}
+*/	    
 	i++;   	    
 #endif  		
 
