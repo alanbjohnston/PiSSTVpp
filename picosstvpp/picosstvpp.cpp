@@ -71,7 +71,7 @@ void picosstvpp() {
   int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
-  sstv_period = 1E6 / g_rate - 1;  // clock subtract one to increase frequency slightly
+  sstv_period = 1E6 / g_rate;  // clock
   char octet;
   byte lower;
   byte upper;
@@ -363,8 +363,6 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //    tonefreq += 20;  // increase frequency by 20 Hz
 //    tonefreq *= 1.01333;  // increase frequency by scale.
 
-   if (Serial.available() || BOOTSEL || !digitalRead(10))  // check for button press of serial input
-     sstv_stop = true;
 	
     tonedur += g_fudge ;
     tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
