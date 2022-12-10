@@ -443,7 +443,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	  Serial.println("Output file write error");	
 	}
 */	    
-	i++;   	    
+//	i++;   	    
 #endif  		
 
     } // end for i        
