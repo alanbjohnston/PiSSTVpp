@@ -35,6 +35,8 @@ uint16_t   g_rate;
   bool sstv_stop_write = false;
   unsigned long sstv_micro_timer;
   int sstv_period;
+  long prompt_count_max;
+  long prompt_count;	
 
 void picosstvpp_begin(int pin) {
 	
@@ -103,8 +105,8 @@ void picosstvpp() {
 	
 //  output_file = LittleFS.open("/cam.pwm", "r");
 	
-  long prompt_count_max = 1E6 / sstv_period;
-  long prompt_count = 0;	
+  prompt_count_max = 1E6 / sstv_period;
+  prompt_count = 0;	
 	
   sstv_micro_timer = micros();	
 	
