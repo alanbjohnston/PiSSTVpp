@@ -357,7 +357,12 @@ uint8_t filetype( char *filename ) {
 //             Also, yes, a nod to Tom Hanks.
 
 void playtone( uint16_t tonefreq , double tonedur ) {
-    uint16_t tonesamples, voltage, i ;
+#ifdef SSTV_PWM
+    byte voltage;
+#else
+    uint16_t voltage;	
+#endif	
+    uint16_t tonesamples, i ;
     double   deltatheta ;
     
 //    tonefreq += 20;  // increase frequency by 20 Hz
