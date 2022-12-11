@@ -423,7 +423,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
     	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
     	 sstv_micro_timer = micros();
-	  
+/*	  
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
 		prompt_count = 0;
@@ -431,7 +431,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 		if (Serial.available() || BOOTSEL || !digitalRead(10))
 		  sstv_stop = true;  	 
 	    }
-	    
+*/	    
 //	}
 /*	    
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
@@ -489,7 +489,18 @@ void addvisheader() {
     playtone(1500, 900000);
     playtone(1500, 900000);
 	
-//  sstv_stop_write = true;
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);
+    playtone(2000, 900000);	
+	
+  sstv_stop_write = true;
 /**/	
 //    return;	
 	
