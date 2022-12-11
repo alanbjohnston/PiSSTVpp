@@ -517,7 +517,7 @@ void addvisheader() {
     playtone(2000, 900000);
     playtone(2000, 900000);	
 	
-  sstv_stop_write = true;
+//  sstv_stop_write = true;
 /**/	
     return;	
 	
