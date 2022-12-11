@@ -254,7 +254,7 @@ void picosstvpp() {
             break;
         case 56: //Scottie 2
 //            buildaudio_s(275.2);
-	     buildaudio_s(273.0);  // was 274.4 no stripe (vertical band), 274.7 - 1 stripe instead of 3 for 275.2, 274.9 2 stripes, 275.5 auto ML280
+	     buildaudio_s(275.2);  // was 274.4 no stripe (vertical band), 274.7 - 1 stripe instead of 3 for 275.2, 274.9 2 stripes, 275.5 auto ML280
             break;
         case 76: //Scottie DX
             buildaudio_s(1080.0);
@@ -359,6 +359,7 @@ uint8_t filetype( char *filename ) {
 void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
     int voltage;
+    tonedur *= 0.99;	
 #else
     uint16_t voltage;	
 #endif	
