@@ -423,6 +423,9 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
     	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
     	 sstv_micro_timer = micros();
+	    
+	 Serial.print(voltage);
+	 Serial.print(",");   
 /*	  
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
