@@ -358,7 +358,7 @@ uint8_t filetype( char *filename ) {
 
 void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
-    byte voltage;
+    int voltage;
 #else
     uint16_t voltage;	
 #endif	
@@ -417,11 +417,15 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
 //            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
 //            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 0)) ; //   range is 1 to wrap - 1
-		  
+            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; //   range is 1 to wrap - 1
+	    if (voltage < 0)
+	      voltage = 0;	    
+/*		  
            int sine =  sin( g_theta ) * (float)((WRAP + 1)/2 + 1);
-	   if (sine < 0)
-	     sine = 0;	   
+	   if (sine < ((-1)*((WRAP + 1)/2)))
+	     sine = (WRAP + 1)/2;	   
            voltage = (WRAP + 1)/2 + sine ; 
+*/		  
 		  
 //	    Serial.println(voltage);	
 //	    g_audio[j] = voltage ;
