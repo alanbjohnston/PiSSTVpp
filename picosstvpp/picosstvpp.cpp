@@ -20,6 +20,7 @@ uint32_t   g_scale, g_samples ;
 double     g_twopioverrate , g_uspersample ; 
 double     g_theta, g_fudge ; 
 uint8_t    g_protocol; //VIS ID's for SSTV protocols
+long	avg_time = 0;
 
 FILE *     g_imgfp ;
 FILE *     g_outfp ;
@@ -434,22 +435,26 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
           }
 // play it	
-	 while ((micros() - sstv_micro_timer) < sstv_period)    { }   	
+	 while ((micros() - sstv_micro_timer) < sstv_period)    { }
+	 int    
 //    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
     	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
-    	 sstv_micro_timer = micros();
+    	 sstv_micro_timer = micros();  
 	    
 //	 Serial.print(voltage);
 //	 Serial.print(",");   
-/*	  
+/**/	  
+	    avg_time += (micros() - sstv_micro_timer);
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
 		prompt_count = 0;
 	//	Serial.println("Prompt!\n");   
-		if (Serial.available() || BOOTSEL || !digitalRead(10))
-		  sstv_stop = true;  	 
+//		if (Serial.available() || BOOTSEL || !digitalRead(10))
+//		  sstv_stop = true;  
+		Serial.printf("a: %f4.1 ", (float)avg_time/(float)prompt_count_max); 
+		avg_time = 0;    
 	    }
-*/	    
+/**/	    
 //	}
 /*	    
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
