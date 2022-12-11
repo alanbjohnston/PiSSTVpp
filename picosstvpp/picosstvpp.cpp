@@ -436,7 +436,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           }
 // play it	
 	 while ((micros() - sstv_micro_timer) < sstv_period)    { }
-	 int    
+         avg_time += (micros() - sstv_micro_timer);
 //    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
     	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
     	 sstv_micro_timer = micros();  
@@ -444,7 +444,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //	 Serial.print(voltage);
 //	 Serial.print(",");   
 /**/	  
-	    avg_time += (micros() - sstv_micro_timer);
+
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
 		prompt_count = 0;
