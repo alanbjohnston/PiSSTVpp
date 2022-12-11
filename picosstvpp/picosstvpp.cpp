@@ -417,7 +417,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
 //            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
 //            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 0)) ; //   range is 1 to wrap - 1
-            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; // was + 1  range is -1 to wrap + 1
+            voltage =     (WRAP + 1)/2 + (byte)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; // was + 1  range is -1 to wrap + 1
 //	    Serial.println(voltage);	
 //	    g_audio[j] = voltage ;
             g_theta += deltatheta ;	
