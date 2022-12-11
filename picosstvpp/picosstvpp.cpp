@@ -359,7 +359,7 @@ uint8_t filetype( char *filename ) {
 void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
     int voltage;
-    tonedur *= 0.99;	
+    tonedur *= 0.995;	
 #else
     uint16_t voltage;	
 #endif	
