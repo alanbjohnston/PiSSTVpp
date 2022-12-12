@@ -106,7 +106,7 @@ void picosstvpp() {
 	
 //  output_file = LittleFS.open("/cam.pwm", "r");
 	
-  prompt_count_max = 1E6 / sstv_period;
+  prompt_count_max = 1E7 / sstv_period;
   prompt_count = 0;	
 	
   sstv_micro_timer = micros();	
