@@ -444,19 +444,19 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	    
 //	 Serial.print(voltage);
 //	 Serial.print(",");   
-/*	  
+/**/	  
 
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
-		prompt_count = 0;
+//		prompt_count = 0;
 	//	Serial.println("Prompt!\n");   
-//		if (Serial.available() || BOOTSEL || !digitalRead(10))
-//		  sstv_stop = true;  
-		Serial.printf("a: %f4.1 ", (float)avg_time/(float)prompt_count_max); 
-		avg_time = 0;    
+		if (Serial.available() || BOOTSEL || !digitalRead(10))
+		  sstv_stop = true;  
+//		Serial.printf("a: %f4.1 ", (float)avg_time/(float)prompt_count_max); 
+//		avg_time = 0;    
 	    }
 	    
-*/	    
+/**/	    
 //	}
 /*	    
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
