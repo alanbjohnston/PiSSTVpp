@@ -106,7 +106,7 @@ void picosstvpp() {
 	
 //  output_file = LittleFS.open("/cam.pwm", "r");
 	
-  prompt_count_max = 1E7 / sstv_period;
+  prompt_count_max = 1E6 / sstv_period;
   prompt_count = 0;	
 	
   sstv_micro_timer = micros();	
@@ -448,7 +448,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
-//		prompt_count = 0;
+		prompt_count = 0;
 	//	Serial.println("Prompt!\n");   
 //		if (Serial.available() || BOOTSEL || !digitalRead(10))
 		if (BOOTSEL || !digitalRead(10))
