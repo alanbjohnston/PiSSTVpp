@@ -502,7 +502,7 @@ void addvisheader() {
     
     // bit of silence
 
-/**/	
+/*	
     playtone(1500, 900000);
     playtone(1500, 900000);
     playtone(1500, 900000);
@@ -526,9 +526,9 @@ void addvisheader() {
     playtone(2000, 900000);	
 	
 //  sstv_stop_write = true;
-/**/	
-//    return;	
 	
+//    return;	
+*/	
     playtone(    0 , 500000 ) ;   
 	
     // attention tones
