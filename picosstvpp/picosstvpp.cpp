@@ -450,8 +450,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	    if (prompt_count > prompt_count_max) {
 		prompt_count = 0;
 	//	Serial.println("Prompt!\n");   
-//		if (Serial.available() || BOOTSEL || !digitalRead(10))
-		if (BOOTSEL || !digitalRead(10))
+		if (Serial.available() || BOOTSEL || !digitalRead(10))
+//		if (BOOTSEL || !digitalRead(10))
 		  sstv_stop = true;  
 //		Serial.printf("a: %f4.1 ", (float)avg_time/(float)prompt_count_max); 
 //		avg_time = 0;    
