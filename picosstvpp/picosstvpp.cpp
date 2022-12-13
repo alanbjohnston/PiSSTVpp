@@ -1291,7 +1291,7 @@ bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
   return 1;
 }
 
-void jpeg_decode(char* filename, char* fileout, bool debug){
+bool jpeg_decode(char* filename, char* fileout, bool debug){
   uint8_t *pImg;
 //  uint16_t *pImg;
   int x,y, bx,by;
@@ -1307,8 +1307,10 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
 //    if (debug)
       Serial.printf("Output opened %s\n", fileout);
   }
-  else
+  else {
     Serial.println("Failed to open output");
+    return false;
+  }
 /*  
   for(i = 0; i < 15360; i++){ // Cleaning Header Buffer array
     sortBuf[i] = 0xFF;
@@ -1335,7 +1337,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   
   if ((w == 0) && (h == 0)) {
     Serial.println("Failed to open jpeg input");
-    return;
+    return false;
   }
 //  counter = 0;
 //  write_complete = false;
@@ -1381,6 +1383,7 @@ void jpeg_decode(char* filename, char* fileout, bool debug){
   if (debug)
     Serial.println("Bin has been written to FS");
   outFile.close();
+  return true;	
 }
 
 void sstv_end() {
