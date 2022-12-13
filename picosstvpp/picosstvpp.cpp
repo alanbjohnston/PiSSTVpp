@@ -444,7 +444,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 	    
 //	 Serial.print(voltage);
 //	 Serial.print(",");   
-/**/	  
+/*	  
 
 	    prompt_count++;
 	    if (prompt_count > prompt_count_max) {
@@ -457,7 +457,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //		avg_time = 0;    
 	    }
 	    
-/**/	    
+*/	    
 //	}
 /*	    
 	byte octet = (g_audio[0] & 0xf) + (((g_audio[1] & 0xf)) << 4);    
