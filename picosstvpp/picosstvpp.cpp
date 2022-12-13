@@ -641,6 +641,7 @@ void buildaudio_m (double pixeltime) {
 //Each pixel is scanned for pixeltime microseconds
 void buildaudio_s (double pixeltime) {
     uint16_t x , y , k ;
+    int kk;    	
     uint32_t pixel ;
     uint8_t r[320], g[320], b[320]; 
     char buff_row[320 * 2] ;
@@ -738,8 +739,6 @@ void buildaudio_s (double pixeltime) {
         // separator tone 
         playtone(1500, 1500) ;
 	
-	int kk;    
-
         // blue channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
 	{
