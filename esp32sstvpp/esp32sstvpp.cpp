@@ -81,6 +81,9 @@ void picosstvpp_begin(int pin) {
   pwm_config.hpoint = 0;
   
   ledc_channel_config(&pwm_config);	
+	
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 0);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);	
 
 }
 
