@@ -56,7 +56,7 @@ void picosstvpp_begin(int pin) {
 	
 //  Serial.println("Deleted .bin and .pwm files");	
 //  show_dir4();
-  SPIFFS.begin();		
+//  SPIFFS.begin();		
 
 }
 
