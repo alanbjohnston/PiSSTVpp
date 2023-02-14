@@ -14,11 +14,8 @@
 //#include <tgmath.h>
 //#include <magic.h>
 //#include <unistd.h>
-#include "LittleFS.h"
-#include "hardware/pwm.h" 
-#include <TJpg_Decoder.h>
-#include "pico/stdlib.h"   // stdlib 
-
+//#include "LittleFS.h"
+#include "SPIFFS.h"
 //uint8_t  filetype       (char *filename) ;
 void     playtone       (uint16_t tonefreq , double tonedur) ;
 void     addvisheader   (void) ;
@@ -40,11 +37,11 @@ void     writefile_wav  (void) ;
 
 void show_dir4();
 //void load_files();
-void play_pwm_file(int dds_pwm_pin) ;
+//void play_pwm_file(int dds_pwm_pin) ;
 
 void picosstvpp_begin(int pin);
 void picosstvpp();
-bool jpeg_decode(char* filename, char* fileout, bool debug);
+//bool jpeg_decode(char* filename, char* fileout, bool debug);
 void sstv_end();
 
 // ================
