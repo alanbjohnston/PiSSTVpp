@@ -48,15 +48,15 @@ void picosstvpp_begin(int pin) {
   Serial.println("picosstvpp v0.4 starting");	
 //  show_dir4();	
 //  load_files();
-  LittleFS.remove("/cam.pwm");
-  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
-  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
+//  LittleFS.remove("/cam.pwm");
+//  LittleFS.remove("/sstv_image_1_320_x_240.jpg");
+//  LittleFS.remove("/sstv_image_2_320_x_240.jpg");
 //  LittleFS.remove("/cam2.bin");
-  LittleFS.remove("/cam.bin");
+//  LittleFS.remove("/cam.bin");
 	
-  Serial.println("Deleted .bin and .pwm files");	
-  show_dir4();
-		
+//  Serial.println("Deleted .bin and .pwm files");	
+//  show_dir4();
+  SPIFFS.begin();		
 
 }
 
@@ -67,7 +67,7 @@ void picosstvpp_begin(int pin) {
 // int main(int argc, char *argv[]) {
 void picosstvpp() {
 	
-    g_rate = WRAP * 4400; //RATE;	
+  g_rate = WRAP * 4400; //RATE;	
   float multiplier;
   int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
@@ -86,7 +86,7 @@ void picosstvpp() {
 //    multiplier = 125E6 / (clock * (wrap + 1));
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
-    
+/*    
     Serial.printf("Pico PWM Playback v0.4 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, sstv_period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
@@ -97,7 +97,7 @@ void picosstvpp() {
     pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
     pwm_init(dds_pin_slice, &dds_pwm_config, true);
     pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
-  
+*/  
 //    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
 	
 //  delay(1000);	 
@@ -225,7 +225,9 @@ void picosstvpp() {
         return 3 ;
     }    
 */    
-    input_file = LittleFS.open("/cam.bin", "r");
+//    input_file = LittleFS.open("/cam.bin", "r");
+    input_file = SPIFFS.open("/cam.bin", "r");
+	
 #ifdef WAV	
     output_file = LittleFS.open("/cam.wav", "w+");	
 #endif	
@@ -437,9 +439,8 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           }
 // play it	
 	 while ((micros() - sstv_micro_timer) < sstv_period)    { }
-///         avg_time += (micros() - sstv_micro_timer);
-//    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
-    	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
+
+//    	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
     	 sstv_micro_timer = micros();  
 	    
 //	 Serial.print(voltage);
@@ -643,7 +644,8 @@ void buildaudio_s (double pixeltime) {
     uint16_t x , y , k ;
     uint32_t pixel ;
     uint8_t r[320], g[320], b[320]; 
-    char buff_row[320 * 2] ;
+//    char buff_row[320 * 2] ;
+    char buff_row[320 * 3] ;
     
     Serial.printf( "Adding image to output file.\n" ) ;
 	
@@ -683,7 +685,7 @@ void buildaudio_s (double pixeltime) {
 ///	    input_file.readBytes(buff, 2);
 		
 //	    pixel_value = buff[0] + (buff[1] << 8);  // back		
-	    pixel_value = buff_row[2 * x] + (buff_row[(2 * x) + 1] << 8);  
+//	    pixel_value = buff_row[2 * x] + (buff_row[(2 * x) + 1] << 8);  
 /*		
            Serial.print(pixel_value, HEX);
   	   Serial.print(" ^ ");
@@ -693,9 +695,9 @@ void buildaudio_s (double pixeltime) {
            Serial.print(buff[0], HEX);
 	  Serial.print(" | ");
 */		
-            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
-            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
-            byte blue_raw = (pixel_value & 0b0000000000011111);   
+//            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
+//            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
+//            byte blue_raw = (pixel_value & 0b0000000000011111);   	
 /*		
 	    Serial.print(red_raw, HEX);
 	    Serial.print(" ");
@@ -704,9 +706,14 @@ void buildaudio_s (double pixeltime) {
 	    Serial.print(blue_raw, HEX);
 	    Serial.print(" / ");			
 */		
-            r[x] = (float)(red_raw) * 255.0/31.0;
-            g[x] = (float)(green_raw) * 255.0/63.0;
-            b[x] = (float)(blue_raw) * 255.0/31.0;    	
+//            r[x] = (float)(red_raw) * 255.0/31.0;
+//            g[x] = (float)(green_raw) * 255.0/63.0;
+//            b[x] = (float)(blue_raw) * 255.0/31.0;    
+		
+            r[x] = buff_row[0];
+            g[x] = buff_row[1];
+            b[x] = buff_row[2];    		
+		
 /*		
 	    Serial.print(r[x], HEX);
 	    Serial.print(" ");
@@ -1042,6 +1049,7 @@ void writefile_wav () {
         
 // end
 
+/*
 void show_dir4() {
   LittleFS.begin();
   Dir dir = LittleFS.openDir("/");
@@ -1058,6 +1066,7 @@ void show_dir4() {
   }
   Serial.println(">");
 }
+*/
 /*
 void load_files() {
   LittleFS.begin();
@@ -1093,298 +1102,6 @@ void load_files() {
   show_dir();
 }
 */
-
-void play_pwm_file(int dds_pwm_pin) {
-	
-//  set_sys_clock_khz(133000, true);
-	
-//  #define DDS_PWM_PIN 26
-//   = DDS_PWM_PIN;	
-//  int clock = RATE; // 11.025E3; // was 22E3 50E3;
-  float multiplier;
-  int wrap = WRAP;  // was 10; // 5;
-  int dds_pin_slice;
-  pwm_config dds_pwm_config;
-  int period = 1E6 / g_rate;  // clock;
-  char octet;
-  byte lower;
-  byte upper;
-  Serial.println("Playing PWM file");	
-  unsigned long sstv_micro_timer;
-	 
-    dds_pwm_pin = 26;
-   
-//    multiplier = 133E6 / (clock * (wrap + 1));
-    multiplier = 133E6 / (g_rate * (wrap + 1));
-//    multiplier = 125E6 / (clock * (wrap + 1));
-	
-//    isr_period = (int) ( 1E6 / clock + 0.5);
-    
-    Serial.printf("Pico PWM Playback v0.3 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, period);
-
-    gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
-    dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
-
-    dds_pwm_config = pwm_get_default_config();
-    pwm_config_set_clkdiv(&dds_pwm_config, multiplier); // was 100.0 50 75 25.0); // 33.333);  // 1.0f
-    pwm_config_set_wrap(&dds_pwm_config, wrap); // 3 
-    pwm_init(dds_pin_slice, &dds_pwm_config, true);
-    pwm_set_gpio_level(dds_pwm_pin, 0); // (dds_pwm_config.top + 1) * 0.5);
-  
-//    Serial.printf("PWM config.top: %d\n", dds_pwm_config.top);
-	
-//  delay(1000);	 
-	
-// while (true) {	
-	
-  output_file = LittleFS.open("/cam.pwm", "r");
-	
-  long prompt_count_max = 1E6 / period;
-  long prompt_count = 0;	
-	
-  sstv_micro_timer = micros();		
-  while (output_file.available() && !sstv_stop) {	
-//  while (!sstv_stop) {	  
-	  
-    output_file.readBytes(&octet, 1);
-    lower = octet & 0x0f;
-    upper = (octet & 0xf0) >> 4;
-//    Serial.printf("%d\n%d\n", lower, upper);	
-	  
-    while ((micros() - sstv_micro_timer) < period)	{ }   	  
-    pwm_set_gpio_level(dds_pwm_pin, lower);
-    sstv_micro_timer = micros();	
-	  
-    while ((micros() - sstv_micro_timer) < period)    { }   	
-    pwm_set_gpio_level(dds_pwm_pin, upper);
-    sstv_micro_timer = micros();
-	  
-    prompt_count++;
-    if (prompt_count > prompt_count_max) {
-	prompt_count = 0;
-//	Serial.println("Prompt!\n");   
-	if (Serial.available() || BOOTSEL || !digitalRead(10))
-	  sstv_stop = true;  	 
-    }
-	  
-  }
-	
-  Serial.println("End");
-  output_file.close();	
-
-//  delay(5000);	 	 
-// }	 
-}
-
-int JpegDec_i;
-int JpegDec_j;
-int JpegDec_height = 240;
-int JpegDec_width = 320;
-//byte  JpegDec_sortBuf[15360]; //320(px)*16(lines)*3(bytes) // Header buffer
-byte  JpegDec_sortBuf[320 * 16 * 2]; //320(px)*16(lines)*2(bytes) // Header buffer
-int JpegDec_pxSkip;
-uint8_t *JpegDec_pImg;
-int JpegDec_x, JpegDec_y, JpegDec_bx, JpegDec_by;
-int JpegDec_comps = 3;
-  
-bool get_block(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
-{
-#ifdef DEBUG
-  Serial.println("\nBlock callback");
-  Serial.println(x);
-  Serial.println(y);
-  Serial.println(w);
-  Serial.println(h);
-#endif
-  int JpegDec_MCUx = x;
-  int JpegDec_MCUy = y;
-  int JpegDec_MCUHeight = h;
-  int JpegDec_MCUWidth = w;
-
-//  JpegDec_pImg = bitmap;
-  
-//    JpegDec_pImg = JpegDec_pImage;
-    for(JpegDec_by=0; JpegDec_by<JpegDec_MCUHeight; JpegDec_by++){
-      for(JpegDec_bx=0; JpegDec_bx<JpegDec_MCUWidth; JpegDec_bx++){
-//        JpegDec_x = JpegDec_MCUx * JpegDec_MCUWidth + JpegDec_bx;
-//        JpegDec_y = JpegDec_MCUy * JpegDec_MCUHeight + JpegDec_by;
-        JpegDec_x = JpegDec_MCUx + JpegDec_bx;
-        JpegDec_y = JpegDec_MCUy + JpegDec_by;
-        if(JpegDec_x<JpegDec_width && JpegDec_y<JpegDec_height){
-//          if(JpegDec_comps == 1){ // Grayscale
-//            //sprintf(str,"%u", pImg[0]);
-//            outFile.write(JpegDec_pImg, 1);
-//          }else
-        { // RGB
-            // When saving to the SD, write 16 lines on one time
-            // First we write on the array 16 lines and then we save to SD
-            JpegDec_pxSkip = ((JpegDec_y - (16 * JpegDec_j)) * 320) + JpegDec_x;
-          
-//            int pixel_value = *bitmap;
-            uint16_t pixel_value = *bitmap;
-/*	
-	        if (y < 100) 
-		    pixel_value = 0xf800;
-		else if (y < 200)
-		    pixel_value = 0x7E0;
-		else
-		    pixel_value = 0x1f;
-*/			
-                      
-//            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
-//            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
-//            byte blue_raw = (pixel_value & 0b0000000000011111);        
-		
-/*
-            byte red = (float)((pixel_value & 0b1111100000000000) >> 11) * 255.0/31.0;
-            byte green = (float)((pixel_value & 0b0000011111100000) >> 5) * 255.0/63.0;
-            byte blue = (float)(pixel_value & 0b0000000000011111) * 255.0/31.0;  
-		
-	    Serial.print(red, HEX);
-	    Serial.print(" ");
-	    Serial.print(green, HEX);
-	    Serial.print(" ");
-	    Serial.print(blue, HEX);
-	    Serial.print(" ");	
-*/	 
-		
-//            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 0] = red;  // JpegDec_pImg[0];
-//            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 1] = green; // JpegDec_pImg[1];
-//            JpegDec_sortBuf[(3 * JpegDec_pxSkip) + 2] = blue; // JpegDec_pImg[2];
-
-            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 0] = pixel_value & 0xff;  // JpegDec_pImg[0];
-            JpegDec_sortBuf[(2 * JpegDec_pxSkip) + 1] = (pixel_value & 0xff00) >> 8; // JpegDec_pImg[1];
-/*
-	    Serial.print((pixel_value & 0xff00) >> 8, HEX);		
-	    Serial.print(pixel_value & 0xff, HEX);
-//	    Serial.print(" ");
-	    Serial.print(" ");			
-		
-*/		
-#ifdef DEBUG          
-            Serial.print("sortBuf index = ");
-//            Serial.println((3 * JpegDec_pxSkip));
-            Serial.println((2 * JpegDec_pxSkip));
-
-#endif
-            JpegDec_i++;
-            if(JpegDec_i == 5120){ //320(px)x16(lines)
-#ifdef DEBUG
-              Serial.println("Writing lines!");
-#endif
-              //              for(k = 0; k < 15360; k++){
-//                imgFile.write(sortBuf[k]);
-//              }
-              outFile.write(JpegDec_sortBuf, sizeof(JpegDec_sortBuf));
-              JpegDec_i = 0;
-              JpegDec_j++; //15(sections)
-            }
-          }
-        }
-//        JpegDec_pImg += JpegDec_comps ;
-        bitmap++;
-      }
-    }
-#ifdef DEBUG  
-  Serial.println("Block processed!");
-#endif
-  return 1;
-}
-
-bool jpeg_decode(char* filename, char* fileout, bool debug){
-  uint8_t *pImg;
-//  uint16_t *pImg;
-  int x,y, bx,by;
-//  byte sortBuf[15360]; //320(px)*16(lines)*3(bytes) // Header buffer
-  int i,j,k;
-  int pxSkip;
-  
-  // Open the file for writing
-//  File imgFile = SD.open(fileout, FILE_WRITE);
-  outFile = LittleFS.open(fileout, "w+");
-  
-  if (outFile) {
-//    if (debug)
-      Serial.printf("Output opened %s\n", fileout);
-  }
-  else {
-    Serial.println("Failed to open output");
-    return false;
-  }
-/*  
-  for(i = 0; i < 15360; i++){ // Cleaning Header Buffer array
-    sortBuf[i] = 0xFF;
-  }
-*/
-  // Decoding start
-  
-  if (debug)
-    Serial.println("Starting jpeg decode");
-  
-  JpegDec_i = 0;
-  JpegDec_j = 0;
-  
-  uint16_t w = 0, h = 0;
-  // TJpgDec.getFsJpgSize(&w, &h, "/cam.jpg", LittleFS); // Note name preceded with "/"
-  TJpgDec.getFsJpgSize(&w, &h, filename, LittleFS); // Note name preceded with "/"
-  
-  if (debug) {
-    Serial.print("Width = "); 
-    Serial.print(w); 
-    Serial.print(", height = "); 
-    Serial.println(h);
-  }
-  
-  if ((w == 0) && (h == 0)) {
-    Serial.println("Failed to open jpeg input");
-    return false;
-  }
-//  counter = 0;
-//  write_complete = false;
-  
-  TJpgDec.setJpgScale(1);
-  TJpgDec.setSwapBytes(false);    // was true
-  TJpgDec.setCallback(get_block);  
-  //TJpgDec.drawFsJpg(0, 0, "/cam.jpg", LittleFS);
-  TJpgDec.drawFsJpg(0, 0, filename, LittleFS);
-  
-  if (debug)
-    Serial.println("Draw complete");
-  
-//  while (!write_complete) { Serial.println("Waiting..."); delay(500);}
-
-/*  
-  JpegDec.decodeFile(filename);
-  // Image Information
-  Serial.print("Width     :");
-  Serial.println(JpegDec.width);
-  Serial.print("Height    :");
-  Serial.println(JpegDec.height);
-  Serial.print("Components:");
-  Serial.println(JpegDec.comps);
-  Serial.print("MCU / row :");
-  Serial.println(JpegDec.MCUSPerRow);
-  Serial.print("MCU / col :");
-  Serial.println(JpegDec.MCUSPerCol);
-  Serial.print("Scan type :");
-  Serial.println(JpegDec.scanType);
-  Serial.print("MCU width :");
-  Serial.println(JpegDec.MCUWidth);
-  Serial.print("MCU height:");
-  Serial.println(JpegDec.MCUHeight);
-  Serial.println("");
-*/
-  if (debug)
-    Serial.println("Writing bin to FS");
-
-//  imgFile.write(JpegDec.pImage, sizeof(JpegDec.pImage));
-  
-
-  if (debug)
-    Serial.println("Bin has been written to FS");
-  outFile.close();
-  return true;	
-}
 
 void sstv_end() {
   sstv_stop = true;
