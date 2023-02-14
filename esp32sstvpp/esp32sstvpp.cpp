@@ -83,8 +83,29 @@ void picosstvpp_begin(int pin) {
   ledc_channel_config(&pwm_config);	
 	
   ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 0);
-  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);	
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);
 
+  Serial.println("Testing PWM");
+  delay(500);
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 127);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);	
+  delay(500);
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 255);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);	
+  delay(500);
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 0);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);
+  delay(500);
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 127);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);
+  delay(500);
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 255);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);	
+  delay(500);
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, 127);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);	
+	
+	
 }
 
 // ================
