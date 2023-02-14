@@ -56,7 +56,20 @@ void picosstvpp_begin(int pin) {
 	
 //  Serial.println("Deleted .bin and .pwm files");	
 //  show_dir4();
-//  SPIFFS.begin();		
+//  SPIFFS.begin();	
+
+// config ESP32 PWM (LEDC)	
+	
+  ledc_channel_config_t pwm_config;
+  
+  pwm_config.channel = LEDC_CHANNEL_3;
+  pwm_config.timer_sel = LEDC_TIMER_1;
+  pwm_config.gpio_num = 2;
+  pwm_config.speed_mode = LEDC_HIGH_SPEED_MODE;
+  pwm_config.duty = 2;
+  pwm_config.hpoint = 0;
+  
+  ledc_channel_config(&pwm_config);	
 
 }
 
