@@ -454,7 +454,10 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 // play it	
 	 while ((micros() - sstv_micro_timer) < sstv_period)    { }
 
-//    	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
+//    	 pwm_set_gpio_level(sstv_pwm_pin, voltage);	    
+         ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, voltage);
+         ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);
+	    
     	 sstv_micro_timer = micros();  
 	    
 //	 Serial.print(voltage);
