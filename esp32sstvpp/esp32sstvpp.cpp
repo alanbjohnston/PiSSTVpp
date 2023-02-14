@@ -59,7 +59,17 @@ void picosstvpp_begin(int pin) {
 //  show_dir4();
 //  SPIFFS.begin();	
 
-// config ESP32 PWM (LEDC)	
+// config ESP32 PWM (LEDC)
+		
+  ledc_timer_config_t pwm_timer;
+	
+  pwm_timer.timer_num = LEDC_TIMER_1;
+  pwm_timer.speed_mode = LEDC_HIGH_SPEED_MODE;
+  pwm_timer.duty_resolution = LEDC_TIMER_8_BIT;
+  pwm_timer.freq_hz = 200000;
+	
+  ledc_timer_config(&pwm_timer);
+	
 	
   ledc_channel_config_t pwm_config;
   
