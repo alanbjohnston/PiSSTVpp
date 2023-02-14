@@ -446,7 +446,9 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
 //            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
 //            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 0)) ; //   range is 1 to wrap - 1
-            voltage =     (WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1)) ; //   range is 1 to wrap - 1
+//            voltage =     (255/WRAP) * ((WRAP + 1)/2 + (int)( sin( g_theta ) * (float)((WRAP + 1)/2 + 1))) ; //   range is 1 to wrap - 1
+            voltage = 127 + (127.0 * sin( g_theta )); //   range is 0 to 254
+
 	    if (voltage < 0)
 	      voltage = 0;	    
 /*		  
