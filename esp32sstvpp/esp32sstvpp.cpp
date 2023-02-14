@@ -7,6 +7,7 @@
 // Ported to ESP32 and turned into a library by Alan Johnston, KU2Y
 
 #include "esp32sstvpp.h"
+#include <driver/ledc.h> 
 
 // =========
 // globals
