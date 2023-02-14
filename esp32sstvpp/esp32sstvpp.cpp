@@ -130,7 +130,7 @@ void picosstvpp() {
   int  dds_pwm_pin = 26;
    
 //    multiplier = 133E6 / (clock * (wrap + 1));
-    multiplier = 133E6 / (g_rate * (wrap + 1));
+//    multiplier = 133E6 / (g_rate * (wrap + 1));
 //    multiplier = 125E6 / (clock * (wrap + 1));
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
@@ -304,8 +304,8 @@ void picosstvpp() {
             buildaudio_s(432.0);
             break;
         case 56: //Scottie 2
-//            buildaudio_s(275.2);
-	     buildaudio_s(274.0);  // was 274.4 no stripe (vertical band), 274.7 - 1 stripe instead of 3 for 275.2, 274.9 2 stripes, 275.5 auto ML280
+            buildaudio_s(275.2);  // 275.2 is original code
+//	     buildaudio_s(274.0);  // was 274.4 no stripe (vertical band), 274.7 - 1 stripe instead of 3 for 275.2, 274.9 2 stripes, 275.5 auto ML280
             break;
         case 76: //Scottie DX
             buildaudio_s(1080.0);
@@ -410,8 +410,8 @@ uint8_t filetype( char *filename ) {
 void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
     int voltage;
-    tonedur *= 0.97;
-    tonefreq *= 1.014;	
+//    tonedur *= 0.97;
+//    tonefreq *= 1.014;	
 #else
     uint16_t voltage;	
 #endif	
@@ -465,7 +465,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 //          if ( tonefreq == 0 ) { g_audio[j] = 32768 ; }		
           if ( tonefreq == 0 ) 
 //	      g_audio[j] = (WRAP + 1)/2; 
-	      voltage = (WRAP + 1)/2; 
+	      voltage = 127; // (WRAP + 1)/2; 
           else {
 
 //            voltage =     3 + (int)( sin( g_theta ) * 4.0 ) ;  // wrap 5+1
@@ -557,7 +557,7 @@ void addvisheader() {
     
     // bit of silence
 
-/*	
+/**/	
     playtone(1500, 900000);
     playtone(1500, 900000);
     playtone(1500, 900000);
@@ -583,7 +583,7 @@ void addvisheader() {
 //  sstv_stop_write = true;
 	
 //    return;	
-*/	
+/**/	
     playtone(    0 , 500000 ) ;   
 	
     // attention tones
