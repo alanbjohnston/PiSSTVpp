@@ -8,6 +8,7 @@
 
 #include "esp32sstvpp.h"
 #include <driver/ledc.h> 
+#include “esp_timer.h”
 
 // =========
 // globals
@@ -157,7 +158,7 @@ void picosstvpp() {
   prompt_count_max = 4 * 1E6 / sstv_period;
   prompt_count = 0;	
 	
-  sstv_micro_timer = micros();	
+  sstv_micro_timer = esp_timer_get_time ();  //micros();	
 	
     char *protocol; 
     int option;
@@ -411,7 +412,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
     int voltage;
 //    tonedur *= 0.97;
-    tonefreq *= 1.07;	
+//    tonefreq *= 1.07;	
 #else
     uint16_t voltage;	
 #endif	
@@ -488,13 +489,13 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
           }
 // play it	
-	 while ((micros() - sstv_micro_timer) < sstv_period)    { }
+	 while ((esp_timer_get_time () - sstv_micro_timer) < sstv_period)    { }
 
 //    	 pwm_set_gpio_level(sstv_pwm_pin, voltage);	    
          ledc_set_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3, voltage);
          ledc_update_duty(LEDC_HIGH_SPEED_MODE, LEDC_CHANNEL_3);
 	    
-    	 sstv_micro_timer = micros();  
+    	 sstv_micro_timer = esp_timer_get_time ();  //micros();  
 	    
 //	 Serial.print(voltage);
 //	 Serial.print(",");   
