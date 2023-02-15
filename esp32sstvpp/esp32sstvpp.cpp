@@ -716,7 +716,7 @@ void buildaudio_s (double pixeltime) {
     for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-	input_file.readBytes(buff_row, sizeof(buff_row));    
+////	input_file.readBytes(buff_row, sizeof(buff_row));    
         for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
 /*
 	if ( x < 100) {
@@ -736,7 +736,7 @@ void buildaudio_s (double pixeltime) {
 	}
 */		
 		/**/
-//	    input_file.readBytes(buff, 3);
+	    input_file.readBytes(buff, 3);
 ///	    input_file.readBytes(buff, 2);
 		
 //	    pixel_value = buff[0] + (buff[1] << 8);  // back		
@@ -765,9 +765,9 @@ void buildaudio_s (double pixeltime) {
 //            g[x] = (float)(green_raw) * 255.0/63.0;
 //            b[x] = (float)(blue_raw) * 255.0/31.0;    
 		
-            r[x] = buff_row[3 * x + 0];
-            g[x] = buff_row[3 * x + 1];
-            b[x] = buff_row[3 * x + 2];    		
+////            r[x] = buff_row[3 * x + 0];
+////            g[x] = buff_row[3 * x + 1];
+////            b[x] = buff_row[3 * x + 2];    		
 		
 /*		
 	    Serial.print(r[x], HEX);
@@ -778,9 +778,9 @@ void buildaudio_s (double pixeltime) {
 	    Serial.print(" + ");	
 */		
 /**/          
-//          r[x] =  buff[0];
-//          g[x] =  buff[1];
-//          b[x] =  buff[2];	
+          r[x] =  buff[0];
+          g[x] =  buff[1];
+          b[x] =  buff[2];	
 		
 //            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
             
