@@ -702,7 +702,7 @@ void buildaudio_s (double pixeltime) {
 //    char buff_row[320 * 2] ;
     char buff_row[320 * 3] ;
     
-    Serial.printf( "Adding image to output file.\n" ) ;
+    Serial.printf( "Adding image to output file!\n" ) ;
 	
 //    char buff[3];
     char buff[2];
@@ -716,7 +716,7 @@ void buildaudio_s (double pixeltime) {
     for ( y=0 ; ((y<240) && !sstv_stop_write  && !sstv_stop) ; y++ ) {
         // read image data
 //	Serial.println("Starting row");    
-	Serial.println(input_file.readBytes(buff_row, sizeof(buff_row)));    
+	input_file.readBytes(buff_row, sizeof(buff_row));    
         for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
 /*
 	if ( x < 100) {
