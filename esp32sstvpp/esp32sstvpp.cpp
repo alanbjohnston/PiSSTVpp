@@ -412,7 +412,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
     int voltage;
 //    tonedur *= 0.97;
-//    tonefreq *= 1.07;	
+    tonefreq = (((float)(tonefreq)) * 1.07) + 0.5;	
 #else
     uint16_t voltage;	
 #endif	
