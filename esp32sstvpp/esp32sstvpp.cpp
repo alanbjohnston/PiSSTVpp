@@ -412,8 +412,8 @@ uint8_t filetype( char *filename ) {
 void playtone( uint16_t tonefreq , double tonedur ) {
 #ifdef SSTV_PWM
     int voltage;
-    tonedur = (((float)(tonedur)) / 1.07) + 0.5;
-    tonefreq = (((float)(tonefreq)) * 1.07) + 0.5;	
+    tonedur = (((float)(tonedur)) / 1.073) + 0.5;
+    tonefreq = (((float)(tonefreq)) * 1.073) + 0.5;	
 #else
     uint16_t voltage;	
 #endif	
@@ -718,7 +718,7 @@ void buildaudio_s (double pixeltime) {
 //	Serial.println("Starting row");    
 ////	input_file.readBytes(buff_row, sizeof(buff_row));    
         for ( x=0 ; ((x<320) && !sstv_stop_write && !sstv_stop) ; x++ ) {
-/*
+/**/
 	if ( x < 100) {
 		r[x] = 0xff;
 		g[x] = 0;		
@@ -734,9 +734,9 @@ void buildaudio_s (double pixeltime) {
 		g[x] = 0;		
 		b[x] = 0xff;	
 	}
-*/		
+/**/		
 		/**/
-	    input_file.readBytes(buff, 3);
+//	    input_file.readBytes(buff, 3);
 ///	    input_file.readBytes(buff, 2);
 		
 //	    pixel_value = buff[0] + (buff[1] << 8);  // back		
@@ -777,11 +777,11 @@ void buildaudio_s (double pixeltime) {
 	    Serial.print(b[x], HEX);
 	    Serial.print(" + ");	
 */		
-/**/          
+/*          
           r[x] =  buff[0];
           g[x] =  buff[1];
           b[x] =  buff[2];	
-		
+*/		
 //            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
             
             // get color data
@@ -804,7 +804,7 @@ void buildaudio_s (double pixeltime) {
         // blue channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
 	{
-	    if (k > 5) kk = k - 5; else kk = k;	
+/////	    if (k > 5) kk = k - 5; else kk = k;	
             playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
 	}
 
@@ -817,7 +817,7 @@ void buildaudio_s (double pixeltime) {
         // red channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
 	{
-	    if (k > 10) kk = k - 10; else kk = k;			
+/////	    if (k > 10) kk = k - 10; else kk = k;			
             playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
 	}
 //       Serial.println("Ending row");    
