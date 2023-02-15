@@ -48,7 +48,7 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
 //  Serial.begin(115200);	
-  Serial.println("picosstvpp v0.4 starting");	
+  Serial.println("esp32sstvpp v0.5 starting");	
 //  show_dir4();	
 //  load_files();
 //  LittleFS.remove("/cam.pwm");
@@ -115,7 +115,7 @@ void picosstvpp_begin(int pin) {
 // ================
 
 // int main(int argc, char *argv[]) {
-void picosstvpp() {
+void picosstvpp(*uint8_t bitmap) {
 	
   g_rate = WRAP * 4400; //RATE;	
   float multiplier;
