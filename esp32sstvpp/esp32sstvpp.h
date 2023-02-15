@@ -43,7 +43,7 @@ void show_dir4();
 
 void picosstvpp_begin(int pin);
 void picosstvpp();
-//bool jpeg_decode(char* filename, char* fileout, bool debug);
+bool jpeg_decode(char* filename, char* fileout, bool debug);
 void sstv_end();
 
 // ================
