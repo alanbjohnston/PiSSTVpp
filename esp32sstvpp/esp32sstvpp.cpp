@@ -741,59 +741,23 @@ void buildaudio_s (double pixeltime) {
 		b[x] = 0xff;	
 	}
 */		
-		/**/
-//	    input_file.readBytes(buff, 3);
-///	    input_file.readBytes(buff, 2);
 		
-//	    pixel_value = buff[0] + (buff[1] << 8);  // back		
-//	    pixel_value = buff_row[2 * x] + (buff_row[(2 * x) + 1] << 8);  
-/*		
-           Serial.print(pixel_value, HEX);
-  	   Serial.print(" ^ ");
-		
-           Serial.print(buff[1], HEX);
-	  Serial.print(" ");
-           Serial.print(buff[0], HEX);
-	  Serial.print(" | ");
-*/		
-//            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
-//            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
-//            byte blue_raw = (pixel_value & 0b0000000000011111);   	
-/*		
-	    Serial.print(red_raw, HEX);
-	    Serial.print(" ");
-	    Serial.print(green_raw, HEX);
-	    Serial.print(" ");
-	    Serial.print(blue_raw, HEX);
-	    Serial.print(" / ");			
-*/		
-//            r[x] = (float)(red_raw) * 255.0/31.0;
-//            g[x] = (float)(green_raw) * 255.0/63.0;
-//            b[x] = (float)(blue_raw) * 255.0/31.0;    
-		
+#ifdef RGB565			
+	    pixel_value = buff_row[2 * x] + (buff_row[(2 * x) + 1] << 8);  
+	
+            byte red_raw = (pixel_value & 0b1111100000000000) >> 11;
+            byte green_raw = (pixel_value & 0b0000011111100000) >> 5;         
+            byte blue_raw = (pixel_value & 0b0000000000011111);   	
+
+            r[x] = (float)(red_raw) * 255.0/31.0;
+            g[x] = (float)(green_raw) * 255.0/63.0;
+            b[x] = (float)(blue_raw) * 255.0/31.0;    
+#else		
             r[x] = buff_row[3 * x + 0];
             g[x] = buff_row[3 * x + 1];
             b[x] = buff_row[3 * x + 2];    		
-		
-/*		
-	    Serial.print(r[x], HEX);
-	    Serial.print(" ");
-	    Serial.print(g[x], HEX);
-	    Serial.print(" ");
-	    Serial.print(b[x], HEX);
-	    Serial.print(" + ");	
-*/		
-/*          
-          r[x] =  buff[0];
-          g[x] =  buff[1];
-          b[x] =  buff[2];	
-*/		
-//            pixel = gdImageGetTrueColorPixel( g_imgp, x, y ) ;
-            
-            // get color data
-//            r[x] = gdTrueColorGetRed( pixel ) ;
-//            g[x] = gdTrueColorGetGreen( pixel ) ;
-//            b[x] = gdTrueColorGetBlue( pixel ) ;
+#endif		
+
         }
         //seperator pulse
         playtone(1500, 1500);
