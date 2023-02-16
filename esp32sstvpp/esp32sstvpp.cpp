@@ -11,6 +11,8 @@
 //#include "esp_timer.h"
 #include "freertos/timers.h"
 
+#define RGB565
+
 // =========
 // globals
 // =========
@@ -700,10 +702,14 @@ void buildaudio_s (double pixeltime) {
     uint32_t pixel ;
     uint8_t r[320], g[320], b[320]; 
 //    char buff_row[320 * 2] ;
-    char buff_row[320 * 3] ;
-    
-    Serial.printf( "Adding image to output file!\n" ) ;
+#ifdef RGB565	
+    char buff_row[320 * 2];
+#else
+    char buff_row[320 * 3];	
+#endif	
 	
+    Serial.printf( "Adding image to output file!\n" ) ;
+
 //    char buff[3];
     char buff[2];
     uint16_t pixel_value;	
