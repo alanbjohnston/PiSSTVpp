@@ -50,7 +50,7 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
 //  Serial.begin(115200);	
-  Serial.println("picosstvpp v0.4 starting");	
+  Serial.println("esp32sstvpp v0.1 starting");	
 //  show_dir4();	
 //  load_files();
 //  LittleFS.remove("/cam.pwm");
