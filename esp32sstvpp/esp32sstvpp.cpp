@@ -776,8 +776,8 @@ void buildaudio_s (double pixeltime) {
         // blue channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
 	{
-/////	    if (k > 5) kk = k - 5; else kk = k;	
-	    kk = k;			
+	    if (k > 5) kk = k - 5; else kk = k;	
+//	    kk = k;			
             playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
 	}
 
@@ -790,8 +790,8 @@ void buildaudio_s (double pixeltime) {
         // red channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
 	{
-/////	    if (k > 10) kk = k - 10; else kk = k;
-	    kk = k;	
+	    if (k > 10) kk = k - 10; else kk = k;
+//	    kk = k;	
             playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
 	}
 //       Serial.println("Ending row");    
