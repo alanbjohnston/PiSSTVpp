@@ -44,6 +44,7 @@ uint16_t   g_rate;
   long prompt_count_max;
   long prompt_count;	
 
+
 void picosstvpp_begin(int pin) {
 	
 //	     Serial.println(micros() - sstv_micro_timer);	
