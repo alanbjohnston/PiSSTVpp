@@ -45,7 +45,7 @@ void picosstvpp_begin(int pin) {
   sstv_pwm_pin = pin;	
 //  delay(10000);	
   Serial.begin(115200);	
-  Serial.println("picosstvpp v0.4 starting");	
+  Serial.println("picosstvpp v0.5 starting");	
 //  show_dir4();	
 //  load_files();
   LittleFS.remove("/cam.pwm");
@@ -87,7 +87,7 @@ void picosstvpp() {
 	
 //    isr_period = (int) ( 1E6 / clock + 0.5);
     
-    Serial.printf("Pico PWM Playback v0.4 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, sstv_period);
+    Serial.printf("Pico PWM Playback v0.5 begin\nClock: %d Wrap: %d Multiplier: %4.1f Period: %d\n", g_rate, wrap, multiplier, sstv_period);
 
     gpio_set_function(dds_pwm_pin, GPIO_FUNC_PWM);
     dds_pin_slice = pwm_gpio_to_slice_num(dds_pwm_pin);
