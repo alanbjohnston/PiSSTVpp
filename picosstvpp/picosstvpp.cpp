@@ -72,7 +72,7 @@ void picosstvpp() {
   int wrap = WRAP;  // was 10; // 5;
   int dds_pin_slice;
   pwm_config dds_pwm_config;
-  sstv_period = 1E6 / g_rate;  // clock
+  sstv_period = 1E6 / g_rate - 1;  // clock
   char octet;
   byte lower;
   byte upper;
