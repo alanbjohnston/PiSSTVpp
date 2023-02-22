@@ -375,7 +375,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
 	
     tonedur += g_fudge ;
-    tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
+    tonesamples = ( tonedur / g_uspersample ); //  + 0.5 ;
 /*	
     if (tonesamples > MAXSAMPLES) {
 	Serial.printf("Tonesamples overflow: %d \n", tonesamples); 
