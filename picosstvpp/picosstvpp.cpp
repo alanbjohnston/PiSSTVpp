@@ -733,7 +733,8 @@ void buildaudio_s (double pixeltime) {
         
         // add audio for green channel for this row
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
-	    if ((k >8) && (k < 300))	
+//	    if ((k >8) && (k < 300))	
+	    if (true)	    		    
               playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 	    else
               playtone( toneval_rgb(0) , pixeltime ); 		    	
@@ -747,8 +748,9 @@ void buildaudio_s (double pixeltime) {
         // blue channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
 	{
-	    if (k > 5) kk = k - 5; else kk = 0;  // k	
-	    if ((kk >8) && (kk < 300))	
+	    if (k > 5) kk = k - 5; else kk = 2;  // k	
+//	    if ((kk >8) && (kk < 300))	
+	    if (true)	    		    
               playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
 	    else
               playtone( toneval_rgb(0) , pixeltime ); 		    
@@ -763,8 +765,9 @@ void buildaudio_s (double pixeltime) {
         // red channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
 	{
-	    if (k > 10) kk = k - 10; else kk = 0;	 //k
-	    if ((kk >8) && (kk < 300))	
+	    if (k > 10) kk = k - 10; else kk = 2;	 //k
+//	    if ((kk >8) && (kk < 300))	
+	    if (true)	    
               playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
 	    else
               playtone( toneval_rgb(0) , pixeltime ); 			
