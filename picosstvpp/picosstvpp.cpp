@@ -437,6 +437,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
           }
 // play it	
 	 while ((micros() - sstv_micro_timer) < sstv_period)    { }
+	 busy_wait_at_least_cycles(56);	// 454 ns    
 ///         avg_time += (micros() - sstv_micro_timer);
 //    	 pwm_set_gpio_level(dds_pwm_pin, voltage);
     	 pwm_set_gpio_level(sstv_pwm_pin, voltage);
