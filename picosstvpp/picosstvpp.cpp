@@ -733,7 +733,11 @@ void buildaudio_s (double pixeltime) {
         
         // add audio for green channel for this row
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
-            playtone( toneval_rgb( g[k] ) , pixeltime ) ;
+	    if ((k >10) && (k < 310))	
+              playtone( toneval_rgb( g[k] ) , pixeltime ) ;
+	    else
+              playtone( toneval_rgb(0) , pixeltime ); 		    	
+		
 
         // separator tone 
         playtone(1500, 1500) ;
@@ -744,7 +748,10 @@ void buildaudio_s (double pixeltime) {
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
 	{
 	    if (k > 5) kk = k - 5; else kk = k;	
-            playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
+	    if ((kk >10) && (kk < 310))	
+              playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
+	    else
+              playtone( toneval_rgb(0) , pixeltime ); 		    
 	}
 
         //sync pulse
@@ -756,8 +763,12 @@ void buildaudio_s (double pixeltime) {
         // red channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
 	{
-	    if (k > 10) kk = k - 10; else kk = k;			
-            playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
+	    if (k > 10) kk = k - 10; else kk = k;	
+	    if ((kk >10) && (kk < 310))	
+              playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
+	    else
+              playtone( toneval_rgb(0) , pixeltime ); 			
+		        
 	}
 //       Serial.println("Ending row");    
     }  // end for y
