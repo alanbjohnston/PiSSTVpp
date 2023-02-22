@@ -733,8 +733,9 @@ void buildaudio_s (double pixeltime) {
         
         // add audio for green channel for this row
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
+	    if (k >8)	
 //	    if ((k >8) && (k < 300))	
-	    if (true)	    		    
+//	    if (true)	    		    
               playtone( toneval_rgb( g[k] ) , pixeltime ) ;
 	    else
               playtone( toneval_rgb(0) , pixeltime ); 		    	
