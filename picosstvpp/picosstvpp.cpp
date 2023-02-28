@@ -255,7 +255,9 @@ void picosstvpp() {
             break;
         case 56: //Scottie 2
 //            buildaudio_s(275.2);
-	     buildaudio_s(274.0);  // was 274.4 no stripe (vertical band), 274.7 - 1 stripe instead of 3 for 275.2, 274.9 2 stripes, 275.5 auto ML280
+             buildaudio_s(275.1);
+		    
+//	     buildaudio_s(274.0);  // was 274.4 no stripe (vertical band), 274.7 - 1 stripe instead of 3 for 275.2, 274.9 2 stripes, 275.5 auto ML280
             break;
         case 76: //Scottie DX
             buildaudio_s(1080.0);
@@ -373,7 +375,7 @@ void playtone( uint16_t tonefreq , double tonedur ) {
 
 	
     tonedur += g_fudge ;
-    tonesamples = ( tonedur / g_uspersample ) + 0.5 ;
+    tonesamples = ( tonedur / g_uspersample ); //  + 0.5 ;
 /*	
     if (tonesamples > MAXSAMPLES) {
 	Serial.printf("Tonesamples overflow: %d \n", tonesamples); 
@@ -489,7 +491,7 @@ uint16_t toneval_rgb ( uint8_t colorval ) {
     return ( ( 800 * colorval ) / 256 ) + 1500 ;
 }
 */
-#define toneval_rgb(colorval) ((( 800 * colorval) / 256) + 1500) 
+#define toneval_rgb(colorval) ((int)((( 800.0 * (float)colorval) / 256.0) + 0.5) + 1500) 
 
 uint16_t toneval_yuv ( uint8_t colorval ) {
     return ( (float)colorval * 3.1372549 ) + 1500.0 ;
@@ -733,7 +735,14 @@ void buildaudio_s (double pixeltime) {
         
         // add audio for green channel for this row
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
-            playtone( toneval_rgb( g[k] ) , pixeltime ) ;
+//	    if (k >8)	
+//	    if ((k >8) && (k < 300))	
+//	    if (true)	 
+	    if ((k < 305))			
+              playtone( toneval_rgb( g[k] ) , pixeltime ) ;
+	    else
+              playtone( toneval_rgb(0) , pixeltime ); 		    	
+		
 
         // separator tone 
         playtone(1500, 1500) ;
@@ -743,8 +752,13 @@ void buildaudio_s (double pixeltime) {
         // blue channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop) ; k++ )
 	{
-	    if (k > 5) kk = k - 5; else kk = k;	
-            playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
+	    if (k > 5) kk = k - 5; else kk = 2;  // k	
+//	    if ((kk >8) && (kk < 300))	
+//	    if (true)	 
+	    if ((kk < 305))		    
+              playtone( toneval_rgb( b[kk] ) , pixeltime ) ; 
+	    else
+              playtone( toneval_rgb(0) , pixeltime ); 		    
 	}
 
         //sync pulse
@@ -756,8 +770,15 @@ void buildaudio_s (double pixeltime) {
         // red channel
         for ( k=0 ; ((k<320) && !sstv_stop_write && !sstv_stop)  ; k++ )
 	{
-	    if (k > 10) kk = k - 10; else kk = k;			
-            playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
+	    if (k > 10) kk = k - 10; else kk = 2;	 //k
+//	    if ((kk >8) && (kk < 300))	
+//	    if (true)	   
+	    if ((kk < 305))	
+		    
+              playtone( toneval_rgb( r[kk] ) , pixeltime ) ;
+	    else
+              playtone( toneval_rgb(0) , pixeltime ); 			
+		        
 	}
 //       Serial.println("Ending row");    
     }  // end for y
